@@ -1,0 +1,12 @@
+<h1>Create new folder at <%= @folder.parent.path %></h1>
+<%= form_for(@folder) do |f| %>
+  <p>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </p>
+
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :parent_id %>
+
+  <%= f.submit %>
+<% end %>

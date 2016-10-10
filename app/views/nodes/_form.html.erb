@@ -1,0 +1,16 @@
+<%= form_for(@node) do |f| %>
+  <p>
+    <%= f.label :title %>
+    <%= f.text_field :title %>
+  </p>
+
+  <p>
+    <%= f.label :content %>
+    <%= f.text_area :content %>
+  </p>
+
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :folder_id %>
+
+  <%= f.submit %>
+<% end %>

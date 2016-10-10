@@ -1,0 +1,30 @@
+<h1>
+  <% @folder.path_components.each do |path_component| %>
+    <%= link_to path_component.title, path_component %>
+    <span>/</span>
+  <% end %>
+</h1>
+
+<ul>
+  <% @folder.children.each do |child| %>
+    <li><%= link_to(child.title, child) %>/</li>
+  <% end %>
+
+  <% @folder.nodes.each do |node| %>
+    <li><%= link_to(node.title, node) %></li>
+  <% end %>
+</ul>
+
+<% if @folder.tags.any? %>
+  <h4>Tags</h4>
+  <% @folder.tags.each do |tag| %>
+    <%= link_to(tag, tag_path(name: tag)) %>
+  <% end %>
+<% end %>
+
+<h4>Manage</h4>
+<p>
+  <%= link_to "Create Folder", new_folder_path(folder: {parent_id: @folder.id}) %>
+  |
+  <%= link_to "Create Node", new_node_path(node: {folder_id: @folder.id}) %>
+</p>

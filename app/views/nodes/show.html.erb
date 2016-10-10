@@ -1,0 +1,19 @@
+<h1>
+  <% @node.folder.path_components.each do |path_component| %>
+    <%= link_to path_component.title, path_component %>
+    <span>/</span>
+  <% end %>
+  <%= @node.title %>
+</h1>
+
+<p><%= @node.content %></p>
+
+<% if @node.tags.any? %>
+  <h4>Tags</h4>
+  <% @node.tags.each do |tag| %>
+    <%= link_to(tag, tag_path(name: tag)) %>
+  <% end %>
+<% end %>
+
+<h4>Manage</h4>
+<%= link_to 'Edit', edit_node_path(@node) %>

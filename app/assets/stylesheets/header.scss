@@ -1,0 +1,21 @@
+.header {
+  display: flex;
+  flex-direction: column;
+
+  .welcome {
+    height: 40px;
+    width: 100%;
+    color: black;
+    text-align: center;
+
+    h2 {
+      font-size: 10pt;
+    }
+  }
+
+  .path {
+    margin: 0;
+    height: 50px;
+    color: black;
+  }
+}

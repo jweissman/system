@@ -1,0 +1,5 @@
+<div class='node-listing'>
+  <%- nodes.each do |node| %>
+    <%= render partial: 'shared/node_box', locals: { node: node } %>
+  <% end %>
+</div>

@@ -1,12 +1,17 @@
-<h1>
-  <% @node.folder.path_components.each do |path_component| %>
-    <%= link_to path_component.title, path_component %>
-    <span>/</span>
-  <% end %>
-  <%= @node.title %>
-</h1>
+<% content_for(:system_path) do %>
+  <span class="node-address">
+    <% @node.folder.path_components.each do |path_component| %>
+      <%= link_to path_component.title, path_component %>
+      <span>/</span>
+    <% end %>
+  </span>
+<% end %>
 
-<p><%= @node.content %></p>
+<div class='folder-listings'>
+  <%= render partial: 'shared/folder_listing', locals: {folder: @node.folder, depth: 5, highlight: @node} %>
+</div>
+
+<%= render partial: 'shared/node_box', locals: { node: @node } %>
 
 <% if @node.tags.any? %>
   <h4>Tags</h4>

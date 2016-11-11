@@ -1,0 +1,66 @@
+@mixin setLinkStyleAll {
+  &, &:hover, &:link, &:active, &:visited {
+        @content;
+    }
+}
+
+html, body {
+  font-family: Helvetica;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.container {
+  margin: 0;
+  box-sizing:border-box;
+  -moz-box-sizing:border-box;
+  -webkit-box-sizing:border-box;
+
+  .content {
+
+  }
+}
+
+.folder-listings {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  .folder-listing {
+    ul {
+      padding: 0px;
+      min-width: 100px;
+      li {
+        a {
+          @include setLinkStyleAll {
+            color: gray;
+            text-decoration: none;
+          }
+
+        }
+        list-style: none;
+      }
+    }
+
+    .folder-child {
+      background-color: lightgrey;
+      padding: 10px;
+    }
+
+    .folder-node {
+      background-color: lightblue;
+      padding: 10px;
+    }
+
+    .light_up {
+      background-color: beige;
+    }
+
+    .no_content {
+      background-color: darkgrey;
+      color: gray;
+    }
+    }
+  }
+

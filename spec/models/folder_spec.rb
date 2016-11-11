@@ -1,8 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe Folder, type: :model do
-  let(:root) { Folder.create }
-  let(:usr) { root.children.create title: 'usr' }
+  let(:admin) { User.create(name: "admin") }
+
+  let(:root) { Folder.create(user: admin, title: "root") }
+  let(:usr) { Folder.create(user: admin, title: "usr", parent: root) } #root.children.create title: 'usr' }
+
+  # before do
+  #   root.save
+  #   usr.save
+  # end
 
   describe 'hierarchy' do
     it 'has a parent' do
@@ -11,7 +18,7 @@ RSpec.describe Folder, type: :model do
     end
 
     it 'has children' do
-      expect(root.children).to eq([usr])
+      expect(root.children).to include(usr)
       expect(usr.children).to be_empty
     end
   end
@@ -19,7 +26,7 @@ RSpec.describe Folder, type: :model do
   describe 'paths' do
     it 'has an address' do
       expect(root.path).to eq '/'
-      expect(usr.path).to eq '/usr'
+      expect(usr.path).to eq 'root/usr'
     end
   end
 end

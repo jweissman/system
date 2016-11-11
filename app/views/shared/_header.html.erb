@@ -1,0 +1,23 @@
+<div class="welcome">
+  <div>
+    <% if user_signed_in? %>
+      <%= gravatar_for current_user.email, size: 30 %>
+      Welcome back, <%= current_user.name %>!
+      <small>
+        (
+        <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+        )
+      </small>
+      <%= link_to "Home", Folder.home_for(current_user) %>
+    <% else %>
+      <%= link_to "Login", new_user_session_path %>
+      | <%= link_to "Root", Folder.root %>
+    <% end %>
+  </div>
+</div>
+
+<div class="path">
+  <h4>
+    <%= yield :system_path %>
+  </h4>
+</div>

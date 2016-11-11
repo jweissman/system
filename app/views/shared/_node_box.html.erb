@@ -1,0 +1,20 @@
+<div class="node-container">
+  <div class="node-header">
+    <span class="node-title">
+      <%= link_to node.title, node %>
+    </span>
+  </div>
+
+  <div class="node-content">
+    <p><%= node.content %></p>
+  </div>
+
+
+  <div class="node-timestamps">
+    created <%= distance_of_time_in_words(Time.now - node.created_at) %> ago.
+
+    last updated
+    <%= distance_of_time_in_words(Time.now - node.updated_at) %>
+    ago.
+  </div>
+</div>

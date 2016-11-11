@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root controller: 'folders', action: 'index'
+
   get 'pages/show'
 
   get '/tags/:name', to: 'tags#show', as: 'tag'
@@ -11,5 +13,4 @@ Rails.application.routes.draw do
   resources :folders
 
   devise_for :users
-  root controller: 'folders', action: 'index'
 end

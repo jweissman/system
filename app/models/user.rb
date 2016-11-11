@@ -5,4 +5,12 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   validates :name, presence: true
+
+  has_many :folders
+
+  def self.root
+    User.find_by(
+      name: "root"
+    ) # || NullUser
+  end
 end

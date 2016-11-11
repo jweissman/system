@@ -1,0 +1,37 @@
+<% if folder.parent && depth > 0 %>
+  <%= render partial: 'shared/folder_listing', locals: {folder: folder.parent, light_up: folder, depth: depth-1} %>
+<% end %>
+
+<div class="folder-listing">
+  <ul>
+    <% folder.children.each do |child| %>
+      <li>
+        <%= link_to(child) do %>
+          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == child) %>
+          <div class="folder-child <%= lit ? 'light_up' : ''%>">
+            <%= child.title %>/
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+
+    <% folder.nodes.each do |node| %>
+     <li>
+        <%= link_to(node) do %>
+          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == node) %>
+          <div class="folder-node  <%= lit ? 'light_up' : ''%>">
+            <%= node.title %>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+
+    <% if folder.empty? %>
+      <li>
+        <div class='folder-node no_content'>
+          No content
+        </div>
+      </li>
+    <% end %>
+  </ul>
+</div>

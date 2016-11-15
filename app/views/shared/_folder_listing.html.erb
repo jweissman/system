@@ -1,15 +1,26 @@
 <% if folder.parent && depth > 0 %>
-  <%= render partial: 'shared/folder_listing', locals: {folder: folder.parent, light_up: folder, depth: depth-1} %>
+  <%= render partial: 'shared/folder_listing', locals: {folder: folder.parent, light_up: folder.path, depth: depth-1} %>
 <% end %>
 
 <div class="folder-listing">
   <ul>
     <% folder.children.each do |child| %>
       <li>
-        <%= link_to(child) do %>
-          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == child) %>
-          <div class="folder-child <%= lit ? 'light_up' : ''%>">
+        <%= maybe_virtual_link_to(child) do %>
+          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == child.path) %>
+          <div class="folder-child <%= lit ? 'light_up' : '' %>">
             <%= child.title %>/
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+
+    <% folder.virtual_children.each do |virtual_child| %>
+      <li>
+        <%= maybe_virtual_link_to virtual_child do %>
+          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == virtual_child.path) %>
+          <div class="folder-child folder-virtual <%= lit ? 'light_up' : '' %>">
+            <%= virtual_child.title %>
           </div>
         <% end %>
       </li>
@@ -17,10 +28,21 @@
 
     <% folder.nodes.each do |node| %>
      <li>
-        <%= link_to(node) do %>
-          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == node) %>
+        <%= maybe_virtual_link_to(node) do %>
+          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == node.path) %>
           <div class="folder-node  <%= lit ? 'light_up' : ''%>">
             <%= node.title %>
+          </div>
+        <% end %>
+      </li>
+    <% end %>
+
+    <% folder.virtual_nodes.each do |vnode| %>
+      <li>
+        <%= maybe_virtual_link_to(vnode) do %>
+          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == vnode.path) %>
+          <div class="folder-node  <%= lit ? 'light_up' : ''%>">
+            <%= vnode.title %>
           </div>
         <% end %>
       </li>

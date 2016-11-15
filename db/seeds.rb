@@ -33,9 +33,11 @@ diana = User.create(
 
 diana.save!
 diana_home = usr.children.create(title: "dprince", user: diana)
+diana_friends = diana_home.children.create(title: "friends", user: diana)
 
 diana_home.nodes.create(title: "about", content: "first")
-diana_home.children.create(title: "minutes")
+diana_minutes = diana_home.children.create(title: "minutes")
+diana_minutes.nodes.create(title: "diana 10am", content: "cleaning up")
 
 # supes
 supes = User.create(
@@ -45,11 +47,14 @@ supes = User.create(
   password_confirmation: "justice"
 )
 
-supes.save!
+supes.save! # ?
 supes_home = usr.children.create(title: "ckent", user: supes)
 
 supes_home.nodes.create(title: "about", content: "soaring overhead")
-supes_home.children.create(title: "minutes")
+supes_minutes = supes_home.children.create(title: "minutes")
+supes_minutes.nodes.create(title: "supes 11am", content: "chilling")
+
+Mount.create(source: supes_home, target: diana_friends)
 
 # initialize system status
 sys.nodes.create(title: "status", content: "hello world")

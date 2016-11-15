@@ -1,7 +1,9 @@
 <div class="node-container">
   <div class="node-header">
     <span class="node-title">
-      <%= link_to node.title, node %>
+      <%= maybe_virtual_link_to node do %>
+        <%= node.title %>
+      <% end %>
     </span>
   </div>
 

@@ -1,0 +1,11 @@
+<h1>CREATE NEW MOUNT</h1>
+
+<h4>You are mounting <b>onto</b> <%= @target.path %>.</h4>
+
+<i>Which folder would you like to mount?</i>
+
+<%= form_for @mount do %>
+  <%= collection_select :mount, :source_id, Folder.all, :id, :path %>
+  <%= hidden_field :mount, :target_id %>
+  <%= submit_tag 'create mount' %>
+<% end %>

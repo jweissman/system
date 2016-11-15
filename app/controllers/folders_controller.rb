@@ -2,7 +2,7 @@ class FoldersController < ApplicationController
   include Navigation
 
   def index
-    redirect_to home_folder_or_root
+    redirect_to Folder.root
   end
 
   def show

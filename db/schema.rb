@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161101185620) do
+ActiveRecord::Schema.define(version: 20161111164619) do
 
   create_table "folders", force: :cascade do |t|
     t.string   "title"
@@ -19,6 +19,13 @@ ActiveRecord::Schema.define(version: 20161101185620) do
     t.datetime "updated_at", null: false
     t.integer  "user_id"
     t.index ["user_id"], name: "index_folders_on_user_id"
+  end
+
+  create_table "mounts", force: :cascade do |t|
+    t.integer  "source_id"
+    t.integer  "target_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "nodes", force: :cascade do |t|

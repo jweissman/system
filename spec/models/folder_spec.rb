@@ -4,12 +4,12 @@ RSpec.describe Folder, type: :model do
   let(:admin) { User.create(name: "admin") }
 
   let(:root) { Folder.create(user: admin, title: "root") }
-  let(:usr) { Folder.create(user: admin, title: "usr", parent: root) } #root.children.create title: 'usr' }
 
-  # before do
-  #   root.save
-  #   usr.save
-  # end
+  let(:usr) { Folder.create(user: admin, title: "usr", parent: root) }
+
+  # root.children.create title: 'usr' }
+  let(:opt) { Folder.create(user: admin, title: "opt", parent: root) }
+  let(:lib) { Folder.create(user: admin, title: "lib", parent: root) }
 
   describe 'hierarchy' do
     it 'has a parent' do
@@ -26,7 +26,51 @@ RSpec.describe Folder, type: :model do
   describe 'paths' do
     it 'has an address' do
       expect(root.path).to eq '/'
-      expect(usr.path).to eq 'root/usr'
+      expect(usr.path).to eq '/usr/'
+    end
+  end
+
+  describe 'mounts' do
+    let!(:mount) do
+      # overlay /opt on /usr
+      Mount.create(source: opt, target: usr)
+    end
+
+    let!(:shared_folder) do
+      Folder.create(user: admin, title: "shared", parent: opt)
+    end
+
+    let!(:shared_file) do
+      shared_folder.nodes.create(title: "hello", content: "world")
+    end
+
+    let!(:another_mount) do
+      Mount.create(source: lib, target: usr)
+    end
+
+    let!(:another_shared_folder) do
+      Folder.create(user: admin, title: "shared", parent: lib)
+    end
+
+    let!(:another_shared_file) do
+      another_shared_folder.nodes.create(title: "hey", content: "there")
+    end
+
+    it 'can be overlaid' do
+      expect(usr.mount_targets).to include(mount)
+      expect(usr.overlays).to include(opt)
+    end
+
+    it 'virtualizes children' do
+      expect(usr.virtual_children).not_to be_empty
+
+      virtual_folder = usr.virtual_children.first
+      expect(virtual_folder.title).to eq(shared_folder.title)
+      expect(virtual_folder.path).to eq("/usr/shared/")
+
+      vnode_names = virtual_folder.nodes.map(&:title)
+      expect(vnode_names).to include(shared_file.title)
+      expect(vnode_names).to include(another_shared_file.title)
     end
   end
 end

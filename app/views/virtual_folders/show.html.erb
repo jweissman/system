@@ -1,6 +1,6 @@
 <% content_for(:system_path) do %>
   <span class="folder-path">
-    <% @folder.path_components.each do |path_component| %>
+    <% @path_components.each do |path_component| %>
       <%= maybe_virtual_link_to path_component do %>
         <%= path_component.title %>
       <% end %>
@@ -11,38 +11,41 @@
 
 <div class="folder-container">
   <div class='folder-listings'>
-    <%= render partial: 'shared/folder_listing', locals: {folder: @folder, depth: 5} %>
+    <%= render partial: 'shared/folder_listing', locals: {folder: @virtual_folder, depth: 8} %>
   </div>
 
-  <% if @folder.tags.any? %>
+  <% if @virtual_folder.tags.any? %>
     <div class="folder-tags">
       <h4>Tags</h4>
-      <% @folder.tags.each do |tag| %>
+      <% @virtual_folder.tags.each do |tag| %>
         <%= link_to(tag, tag_path(name: tag)) %>
       <% end %>
     </div>
   <% end %>
 
-  <% if @folder.overlays.any? %>
+  <% if @virtual_folder.overlays.any? %>
     <div class="folder-overlays">
       <h4>Overlays</h4>
       <ul>
-        <% @folder.overlays.each do |overlaid| %>
+        <% @virtual_folder.overlays.each do |overlaid| %>
           <li><%= overlaid.path %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
+  <% if @virtual_folder.constituents.any? %>
+    <div class="folder-constituents">
+      <h4>Constituents</h4>
+      <ul>
+        <% @virtual_folder.constituents.each do |constituent| %>
+          <li><%= constituent.path %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
 
   <div class="folder-actions">
-    <h4>Manage</h4>
-    <p>
-    <%= link_to "Create Folder", new_folder_path(folder: {parent_id: @folder.id}) %>
-    |
-    <%= link_to "Create Node", new_node_path(node: {folder_id: @folder.id}) %>
-    |
-    <%= link_to "Add Mount", new_mount_path(mount: {target_id: @folder.id}) %>
-    </p>
+    <h4>(no manage)</h4>
   </div>
 </div>

@@ -1,10 +1,18 @@
 <div class="node-container">
   <div class="node-header">
-    <span class="node-title">
-      <%= maybe_virtual_link_to node do %>
-        <%= node.title %>
+      <%= link_to Folder.home_for(node.user) do %>
+        <span class="node-owner">
+          <%= gravatar_for(node.user.email, size: 60) %>
+          <%= node.user.name %> /
+        </span>
       <% end %>
-    </span>
+
+      <%= maybe_virtual_link_to node do %>
+        <span class="node-title">
+          <%= node.title %>
+        </span>
+      <% end %>
+
   </div>
 
   <div class="node-content">
@@ -15,8 +23,10 @@
   <div class="node-timestamps">
     created <%= distance_of_time_in_words(Time.now - node.created_at) %> ago.
 
+
     last updated
     <%= distance_of_time_in_words(Time.now - node.updated_at) %>
     ago.
+
   </div>
 </div>

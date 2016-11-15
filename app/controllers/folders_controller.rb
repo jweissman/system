@@ -17,10 +17,23 @@ class FoldersController < ApplicationController
   def create
     @folder = Folder.new(folder_params.merge(user: current_user))
     if @folder.save then
-      redirect_to folder_path(@folder), notice: "folder #{@folder.title} created"
+      redirect_to (@folder), notice: "folder #{@folder.title} created"
     else
       flash[:alert] = @folder.errors.full_messages
       redirect_to folders_path
+    end
+  end
+
+  def destroy
+    @folder = Folder.find(params[:id])
+    raise "Cannot delete root" if @folder.title == "/"
+
+    parent = @folder.parent
+    if @folder.destroy then
+      redirect_to parent, notice: "folder #{@folder.title} destroyed"
+    else
+      flash[:alert] = @folder.errors.full_messages
+      redirect_to @folder
     end
   end
 

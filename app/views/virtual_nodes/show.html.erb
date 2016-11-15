@@ -13,7 +13,9 @@
   <%= render partial: 'shared/folder_listing', locals: {folder: @virtual_node.folder, depth: 5, highlight: @virtual_node} %>
 </div>
 
-<%= render partial: 'shared/node_box', locals: { node: @virtual_node } %>
+<% @virtual_node.constituents.each do |constituent| %>
+  <%= render partial: 'shared/node_box', locals: { node: constituent } %>
+<% end %>
 
 <% if @virtual_node.tags.any? %>
   <h4>Tags</h4>

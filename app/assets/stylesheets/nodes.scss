@@ -23,17 +23,21 @@
     }
   }
 
-  .node-title {
-    margin-top: 16px;
-  }
 
-  .node-address {
+  .node-header {
+    .node-owner {
+      color: darkgray;
+    }
+
+    .node-title {
+      color: black;
+    }
   }
 
   .node-content {
-    font-size: 1.8em;
+    font-size: 2.8em;
     color: black;
-    padding: 13px;
+    padding: 23px;
   }
 
   .node-timestamps {

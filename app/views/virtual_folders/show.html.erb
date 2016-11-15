@@ -1,13 +1,4 @@
-<% content_for(:system_path) do %>
-  <span class="folder-path">
-    <% @path_components.each do |path_component| %>
-      <%= maybe_virtual_link_to path_component do %>
-        <%= path_component.title %>
-      <% end %>
-      <span>/</span>
-    <% end %>
-  </span>
-<% end %>
+<%= render partial: 'shared/system_path', locals: {path_components: @path_components} %>
 
 <div class="folder-container">
   <div class='folder-listings'>
@@ -28,7 +19,7 @@
       <h4>Overlays</h4>
       <ul>
         <% @virtual_folder.overlays.each do |overlaid| %>
-          <li><%= overlaid.path %></li>
+          <li><%= link_to overlaid.title, page_url(overlaid.path) %></li>
         <% end %>
       </ul>
     </div>
@@ -39,7 +30,7 @@
       <h4>Constituents</h4>
       <ul>
         <% @virtual_folder.constituents.each do |constituent| %>
-          <li><%= constituent.path %></li>
+          <li><%= link_to constituent.title, page_url(constituent.path) %></li>
         <% end %>
       </ul>
     </div>

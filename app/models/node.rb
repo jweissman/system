@@ -3,6 +3,10 @@ class Node < ApplicationRecord
 
   TAG_REGEX = /#([\S]+)/
 
+  def user
+    folder.user
+  end
+
   def path
     folder.path + title
   end

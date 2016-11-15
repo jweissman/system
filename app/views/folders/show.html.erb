@@ -1,13 +1,4 @@
-<% content_for(:system_path) do %>
-  <span class="folder-path">
-    <% @folder.path_components.each do |path_component| %>
-      <%= maybe_virtual_link_to path_component do %>
-        <%= path_component.title %>
-      <% end %>
-      <span>/</span>
-    <% end %>
-  </span>
-<% end %>
+<%= render partial: 'shared/system_path', locals: {path_components: @folder.path_components} %>
 
 <div class="folder-container">
   <div class='folder-listings'>
@@ -28,21 +19,24 @@
       <h4>Overlays</h4>
       <ul>
         <% @folder.overlays.each do |overlaid| %>
-          <li><%= overlaid.path %></li>
+          <li><%= link_to overlaid.title, page_url(overlaid.path) %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
 
-
-  <div class="folder-actions">
-    <h4>Manage</h4>
-    <p>
-    <%= link_to "Create Folder", new_folder_path(folder: {parent_id: @folder.id}) %>
-    |
-    <%= link_to "Create Node", new_node_path(node: {folder_id: @folder.id}) %>
-    |
-    <%= link_to "Add Mount", new_mount_path(mount: {target_id: @folder.id}) %>
-    </p>
-  </div>
+  <% if user_signed_in? && @folder.user == current_user %>
+    <div class="folder-actions">
+      <h4>Manage</h4>
+      <p>
+      <%= link_to "Create Folder", new_folder_path(folder: {parent_id: @folder.id}) %>
+      |
+      <%= link_to "Create Node", new_node_path(node: {folder_id: @folder.id}) %>
+      |
+      <%= link_to "Add Mount", new_mount_path(mount: {target_id: @folder.id}) %>
+      |
+      <%= link_to "Delete Folder", @folder, method: :delete, data: { confirm: "Are you sure?" } %>
+      </p>
+    </div>
+  <% end %>
 </div>

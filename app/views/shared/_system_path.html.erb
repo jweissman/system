@@ -1,0 +1,11 @@
+<% content_for(:system_path) do %>
+  <span class="folder-path">
+    <% path_components.each do |path_component| %>
+      <%= maybe_virtual_link_to path_component do %>
+        <%= path_component.title %>
+      <% end %>
+      <span>/</span>
+    <% end %>
+  </span>
+<% end %>
+

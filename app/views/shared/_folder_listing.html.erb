@@ -9,6 +9,7 @@
         <%= maybe_virtual_link_to(child) do %>
           <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == child.path) %>
           <div class="folder-child <%= lit ? 'light_up' : '' %>">
+            <img src="<%= asset_url 'folder.png' %>" />
             <%= child.title %>/
           </div>
         <% end %>
@@ -20,6 +21,7 @@
         <%= maybe_virtual_link_to virtual_child do %>
           <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == virtual_child.path) %>
           <div class="folder-child folder-virtual <%= lit ? 'light_up' : '' %>">
+            <img src="<%= asset_url 'folder.png' %>" style="opacity: 0.3" />
             <%= virtual_child.title %>
           </div>
         <% end %>
@@ -31,6 +33,7 @@
         <%= maybe_virtual_link_to(node) do %>
           <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == node.path) %>
           <div class="folder-node  <%= lit ? 'light_up' : ''%>">
+            <img src="<%= asset_url 'file.png' %>" />
             <%= node.title %>
           </div>
         <% end %>
@@ -42,6 +45,7 @@
         <%= maybe_virtual_link_to(vnode) do %>
           <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == vnode.path) %>
           <div class="folder-node  <%= lit ? 'light_up' : ''%>">
+            <img src="<%= asset_url 'file.png' %>" style="opacity: 0.3" />
             <%= vnode.title %>
           </div>
         <% end %>

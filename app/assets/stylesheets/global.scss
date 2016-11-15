@@ -27,38 +27,44 @@ html, body {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+
   .folder-listing {
+    min-height: 300px;
+    border: 1px solid black;
     ul {
       padding: 0px;
-      min-width: 100px;
+      min-width: 120px;
       li {
         a {
           @include setLinkStyleAll {
             color: gray;
             text-decoration: none;
           }
-
         }
         list-style: none;
+        img {
+          height: 20px;
+          width: 20px;
+        }
       }
     }
 
     .folder-child {
-      background-color: lightgrey;
+      //background-color: #d0fad0;
       padding: 10px;
     }
 
     .folder-node {
-      background-color: lightblue;
+      //background-color: #fad0d0;
       padding: 10px;
     }
 
     .light_up {
-      background-color: beige;
+      background-color: #d0d0fa;
     }
 
     .no_content {
-      background-color: darkgrey;
+      //background-color: darkgrey;
       color: gray;
     }
     }

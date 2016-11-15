@@ -31,23 +31,31 @@ class VirtualNode
     )
   end
 
-  def exemplar
-    constituents.first
-  end
-
-  def content
-    exemplar.content
-  end
-
   def tags
-    exemplar.tags
+    constituents.flat_map(&:tags).uniq
   end
 
-  def created_at
-    exemplar.created_at
-  end
+  # def exemplar
+  #   constituents.first
+  # end
 
-  def updated_at
-    exemplar.updated_at
-  end
+  # def content
+  #   exemplar.content
+  # end
+
+  # def tags
+  #   exemplar.tags
+  # end
+
+  # def created_at
+  #   exemplar.created_at
+  # end
+
+  # def updated_at
+  #   exemplar.updated_at
+  # end
+
+  # def user
+  #   exemplar.user
+  # end
 end

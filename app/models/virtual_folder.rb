@@ -16,37 +16,48 @@ class VirtualFolder
     Path.dereference(@parent_path)
   end
 
+  def user
+    # constituents.first.user
+    parent.user
+  end
+
   def constituents
-    base = parent.overlays
-    base += parent.constituents if parent.is_a?(VirtualFolder)
-    base.flat_map(&:children).select do |constituent|
-      constituent.title == title
-    end
+    @constituents ||= (
+      base = parent.overlays
+      base += parent.constituents if parent.is_a?(VirtualFolder)
+      base.flat_map(&:children).select do |constituent|
+        constituent.title == title
+      end
+    )
   end
 
   def nodes
-    names = constituents.flat_map(&:nodes).map(&:title).uniq
-    names.map do |name|
-      VirtualNode.new(title: name, parent_path: path)
-    end
+    # names = constituents.flat_map(&:nodes).map(&:title).uniq
+    # names.map do |name|
+    #   VirtualNode.new(title: name, parent_path: path)
+    # end
+    []
   end
 
   def children
-    names = constituents.flat_map(&:children).map(&:title).uniq
-    names.map do |name|
-      VirtualFolder.new(title: name, parent_path: path)
-    end
+    # names = constituents.flat_map(&:children).map(&:title).uniq
+    # names.map do |name|
+    #   VirtualFolder.new(title: name, parent_path: path)
+    # end
+    []
   end
 
   def virtual_children
-    vchildren_names = constituents.flat_map(&:virtual_children).map(&:title).uniq
+    kids = constituents.flat_map(&:children) + constituents.flat_map(&:virtual_children)
+    vchildren_names = kids.map(&:title).uniq
     vchildren_names.map do |name|
       VirtualFolder.new(title: name, parent_path: path)
     end
   end
 
   def virtual_nodes
-    names = constituents.flat_map(&:virtual_nodes).map(&:title).uniq
+    ns = constituents.flat_map(&:nodes) + constituents.flat_map(&:virtual_nodes)
+    names = ns.map(&:title).uniq
     names.map do |name|
       VirtualNode.new(title: name, parent_path: path)
     end
@@ -69,6 +80,6 @@ class VirtualFolder
   end
 
   def empty?
-    !(children.any? || nodes.any?)
+    !(virtual_nodes.any? || virtual_children.any?)
   end
 end

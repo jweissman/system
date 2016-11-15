@@ -60,8 +60,10 @@ class Path
   end
 
   def self.dereference(str)
-    @references ||= {}
-    @references[str] ||= Path.new(str).refer
+    # this will cache references that can break (b/c removal...) :/
+    # @references ||= {}
+    # @references[str] ||=
+      Path.new(str).refer
   end
 
   def self.analyze(str)

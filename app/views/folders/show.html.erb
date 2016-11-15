@@ -4,6 +4,9 @@
   <div class='folder-listings'>
     <%= render partial: 'shared/folder_listing', locals: {folder: @folder, depth: 5} %>
   </div>
+  <% (@folder.nodes + @folder.virtual_nodes).each do |node| %>
+    <%= render partial: 'shared/node_box', locals: { node: node } %>
+  <% end %>
 
   <% if @folder.tags.any? %>
     <div class="folder-tags">

@@ -1,12 +1,10 @@
 class Path
   def initialize(str)
-    @value = str
+    @target = str
   end
 
   def refer
-    path = @value # params.require(:path)
-
-    seek(path, context: Folder.root)
+    seek(@target, context: Folder.root)
   end
 
   # all resources which can be 'immediately' reached from the context
@@ -25,6 +23,7 @@ class Path
       matching_reference = contextual_references(context).detect do |reference|
         reference.title == path_without_leading_slash
       end
+
       if matching_reference
         return matching_reference
       end
@@ -33,6 +32,7 @@ class Path
       matching_subfolder = (context.children + context.virtual_children).detect do |child|
         child.title == subfolder_name
       end
+
       if matching_subfolder
         new_path = ('/'+remaining_path.join('/'))
         seek new_path, context: matching_subfolder
@@ -40,35 +40,37 @@ class Path
     end
   end
 
-  def self.decompose(path)
-    path_elements = path.split('/')
-    return ['/'] if path_elements.count == 0
+  class << self
+    def decompose(path)
+      path_elements = path.split('/')
+      return ['/'] if path_elements.count == 0
 
-    path_elements.inject([]) do |(root,*rest), element|
-      component = if element.empty?
-                    '/'
-                  else
-                    if rest.any?
-                      rest.last + '/' + element
+      path_elements.inject([]) do |(root,*rest), element|
+        component = if element.empty?
+                      '/'
                     else
-                      '/' + element
+                      if rest.any?
+                        rest.last + '/' + element
+                      else
+                        '/' + element
+                      end
                     end
-                  end
 
-      [root].compact + rest + [component]
+        [root].compact + rest + [component]
+      end
     end
-  end
 
-  def self.dereference(str)
-    # this will cache references that can break (b/c removal...) :/
-    # @references ||= {}
-    # @references[str] ||=
-      Path.new(str).refer
-  end
+    def dereference(str)
+      # this will cache references that can break (b/c removal...) :/
+      # @references ||= {}
+      # @references[str] ||=
+      new(str).refer
+    end
 
-  def self.analyze(str)
-    decompose(str).map do |component|
-      dereference component
+    def analyze(str)
+      decompose(str).map do |component|
+        dereference component
+      end
     end
   end
 end

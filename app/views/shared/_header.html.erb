@@ -9,6 +9,12 @@
         )
       </small>
       <%= link_to "Home", Folder.home_for(current_user) %>
+      <%= form_for @status_update do |f| %>
+        <%= f.text_field :content, placeholder: "Whatcha doing?" %>
+        <%= f.hidden_field :title, value: @status_update.title %>
+        <%= f.hidden_field :folder_id, value: @status_update.folder_id %>
+        <%= f.submit 'update status' %>
+      <% end %>
     <% else %>
       <%= link_to "Login", new_user_session_path %>
       | <%= link_to "Root", Folder.root %>

@@ -2,48 +2,84 @@
 
 ## About
 
-System recurses over the internet using the *filesystem metaphor*.
+At a very high level, System can *act like* a number of tools.
+It can behave like a blog, a group messaging tool, a wiki...
+But it's a little more than that! :)
 
-What is the filesystem metaphor?
+## The Filesystem Metaphor
 
-System simulates a shared filesystem. Directories and nodes are accessible directly by URLs.
+System simulates a shared filesystem.
+Directories and nodes are accessible directly by URLs.
+These routes are *symbolically* analyzed.
+This permits System to provide some very powerful tools
+inspired by filesystems like Plan9.
 
-For administrators, it can act as a generalized/arbitrary data-management solution and app-emulation layer.
+One fun way to think of System (and the code definitely reflects it) is
+as a kind of *recursion over the web*.
 
 ## The Basics
 
 You control content in your user's "home" directory... but nowhere else.
-
-You can structure this content how you like. For now the only node types that are supported are plaintext.
-
-(It may eventually be useful to support lots of differents types of structured information -- in particular images seem like they could add a lot of value.)
+You can structure this content how you like.
+But there are some conventions which may help you get the most out of your System.
+You may want to create a folder called `minutes`.
+System will then expose a 'current status' input which creates a new status update
+in `minutes`.
 
 ## The Tools
 
-Part of the intuition which System expresses is that people will make positive use of an open structure...
+Part of the intuition which System expresses is
+that the sorts of symbolic relationships that are possible within a filesystem
+provide an "meta-model" which can express a variety of ontologies contextually.
+(*Bring your own ontology!*)
 
-can be largely expressed contextually through hierarchical relationships.
-
-We provide a "virtual mount" tool which permits a *unified view* of the contents of the different folders...
+In particular a core tool for building symbolic relationships is the "virtual mount"
+tool which permits a *unified view* of the contents of different folders (in different
+places in the hierarchy)...
 
 (This is somewhat similar to union mounts in Plan9.)
 
-The 'virtual paths' this enables can be *symbolically* analyzed by the router.
+Virtual mounts "overlay" different places in the hierarchy and coalesce or
+superpose them.
 
-System can therefore handle the arbitrarily deeply-nested paths which reciprocal mounting makes possible.
+(System can therefore handle the arbitrarily deeply-nested paths which
+reciprocal mounting makes possible, e.g., the recursive folder structure
+which results from reciprocal mounts.)
 
-(E.g., the recursive folder structure which results from reciprocal mounts.)
+Note that System explicitly supports navigating these
+arbitrarily-deeply-nested (recursive) *at the URL level*.
 
-System supports navigating arbitrarily-deeply-nested (recursive) structures even at the URL level.
+## The Dream
 
-## The Dreams
+Let's whisper a little bit of a dream.
+
+We should have powerful collaborative systems for building deep information
+systems and ontologies that reflect the complexity of the world.
+
+Federation is part of the vision here (remote mounts between Systems).
+This permits the strange idea of a URL "tangling" between a number of different
+Systems (this strikes me as a particularly curious and powerful facility.)
+
+## Todo
+
+### Interface
+
+- Setup guide ("It looks like you have a new System...")
+- Theming (possibly hinted by dotfiles?)
+- Books/blogs: .book instructs System to present a given folder as a
+  manpage-ish navigable hierarchy of text docs; .blog as a weblog
+- News: .stream as a 'flattened' river-of-news...
+  (This could fit in with `/usr/xyz/minutes` as a conventional place
+  for status updates to go...  And `/usr/xyz/friends/minutes` might
+  have a `.stream` dotfile)
+
+### Infrastructure
 
 - Visibility levels
-- App emulation/theming (possibly hinted by dotfiles?)
-- Books/blogs: .book instructs System to present a given folder as a manpage-ish navigable hierarchy of text docs; .blog as a weblog
-- News: .stream as a 'flattened' river-of-news...
-  (This could fit in with `/usr/xyz/minutes` as a conventional place for status updates to go...
-   And `/usr/xyz/friends/minutes` might have a `.stream` dotfile)
+- Other node types (images)
+- Processes (could do long/complicated data things with workers that
+             live in `/proc` -- wordcount seems like an interesting one)
+- Sockets
 
 ## Requirements
 

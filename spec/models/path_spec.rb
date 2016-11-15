@@ -105,8 +105,6 @@ RSpec.describe Path, type: :model do
         expect(vchild).to be_a(VirtualFolder)
         expect(vchild.title).to eq('book')
       end
-
-
     end
   end
 

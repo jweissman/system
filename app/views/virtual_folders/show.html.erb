@@ -5,6 +5,10 @@
     <%= render partial: 'shared/folder_listing', locals: {folder: @virtual_folder, depth: 8} %>
   </div>
 
+  <% (@virtual_folder.nodes + @virtual_folder.virtual_nodes).each do |node| %>
+    <%= render partial: 'shared/node_box', locals: { node: node } %>
+  <% end %>
+
   <% if @virtual_folder.tags.any? %>
     <div class="folder-tags">
       <h4>Tags</h4>

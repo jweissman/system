@@ -13,7 +13,7 @@ class Folder < ApplicationRecord
 
   def virtual_children
     virtual_subfolders = overlays.flat_map(&:children)
-    names = virtual_subfolders.map(&:title).uniq
+    names = virtual_subfolders.map(&:title).uniq - children.map(&:title).uniq
 
     names.map do |virtual_folder_name|
       VirtualFolder.new(title: virtual_folder_name, parent_path: self.path)
@@ -22,7 +22,7 @@ class Folder < ApplicationRecord
 
   def virtual_nodes
     vnodes = overlays.flat_map(&:nodes)
-    names = vnodes.map(&:title).uniq
+    names = vnodes.map(&:title).uniq - nodes.map(&:title).uniq
 
     names.map do |virtual_node_name|
       VirtualNode.new(title: virtual_node_name, parent_path: self.path)
@@ -69,6 +69,10 @@ class Folder < ApplicationRecord
 
   def self.home_for(user)
     Folder.find_or_create_by(parent: usr, title: user.name, user: user)
+  end
+
+  def self.minutes_for(user)
+    Folder.find_or_create_by(parent: home_for(user), title: "minutes", user: user)
   end
 
   private

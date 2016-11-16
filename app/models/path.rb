@@ -4,8 +4,6 @@ class Path
   end
 
   def refer
-    # @cached_paths ||= {}
-    # @cached_paths[@target] ||= 
     seek(@target, context: Folder.root)
   end
 
@@ -68,9 +66,6 @@ class Path
 
     def dereference(str)
       new(str).refer
-      # this will cache references that can break (b/c removal...) :/
-      # @references ||= {}
-      # @references[str] ||= new(str).refer
     end
 
     def analyze(str)

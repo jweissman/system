@@ -17,14 +17,12 @@ module System
 
       def nodes
         p [ :remote_folder_nodes, path: path, host: @hostname ]
-        @nodes ||= System.client(hostname: @hostname).files(path)
-        # []
+        System.client(hostname: @hostname).files(path)
       end
 
       def children
         p [ :remote_folder_children, path: path, host: @hostname ]
-        @children ||= System.client(hostname: @hostname).folders(path)
-        # []
+        System.client(hostname: @hostname).folders(path)
       end
     end
 
@@ -70,7 +68,6 @@ module System
       def initialize(hostname, port: 80)
         @host = hostname
         @uri = URI.parse("http://#{hostname}:#{port}")
-        # p [ :uri, @uri ]
       end
 
       def http
@@ -94,8 +91,6 @@ module System
               updated_at: remote_attrs["updated_at"],
               user_name: remote_attrs["user"]["name"],
               user_email: remote_attrs["user"]["email"]
-              # user_id: remote_attrs["user"]["id"]
-              # remote_path: remote_attrs["path"]
             )
           end
         when (400..499)
@@ -123,8 +118,7 @@ module System
             RemoteFolder.new(
               self.host,
               title: remote_folder_attrs["title"],
-              parent_path: path #"/"
-              # remote_path: remote_folder_attrs["path"]
+              parent_path: path
             )
           end
         when (400..499)

@@ -25,6 +25,7 @@ class Node < ApplicationRecord
   def nodes; [] end
   def virtual_nodes; [] end
   def remote_children; [] end
+  def remote_nodes; [] end
 
   def empty?
     content.empty?

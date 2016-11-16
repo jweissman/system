@@ -64,16 +64,19 @@ which results from reciprocal mounts.)
 Note that System explicitly supports navigating these
 arbitrarily-deeply-nested (recursive) *at the URL level*.
 
+Federation also available (remote mounts between Systems).
+This permits the possibility of a URL "tangling" between a number of different
+Systems (which strikes me as a particularly curious and powerful facility.)
+
 ## The Dream
 
 Let's whisper a little bit of a dream.
 
-We should have powerful collaborative systems for building deep information
-systems and ontologies that reflect the complexity of the world.
+We should have *powerful collaborative tools* for building deep information
+systems and ontologies that *reflect the complexity of the world*.
 
-Federation is part of the vision here (remote mounts between Systems).
-This permits the strange idea of a URL "tangling" between a number of different
-Systems (this strikes me as a particularly curious and powerful facility.)
+SYSTEM aims to provide a scalable, open, flexible mechanism for organizing
+and coalescing information.
 
 ## Todo
 

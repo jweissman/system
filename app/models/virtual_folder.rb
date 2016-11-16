@@ -18,12 +18,11 @@ class VirtualFolder
   end
 
   def user
-    # constituents.first.user
     parent.user
   end
 
   def constituents
-    # @constituents ||=
+    @constituents ||=
     (
       base = parent.overlays
       base += parent.constituents if parent.is_a?(VirtualFolder)

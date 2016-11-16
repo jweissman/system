@@ -64,7 +64,6 @@ RSpec.describe Folder, type: :model do
     end
 
     it 'virtualizes children' do
-      # binding.pry
       expect(usr.reload.virtual_children).not_to be_empty
 
       virtual_folder = usr.reload.virtual_children.first

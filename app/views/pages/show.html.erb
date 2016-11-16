@@ -1,2 +1,56 @@
-<h1>Pages#show</h1>
-<p>Find me in app/views/pages/show.html.erb</p>
+<%= render partial: 'shared/system_path', locals: {path_components: Path.analyze(@resource.path)} %>
+
+<div class='folder-listings'>
+  <%= render partial: 'shared/folder_listing', locals: {folder: @resource, depth: 5} %>
+</div>
+
+<% if @resource.is_a?(Node) || @resource.is_a?(VirtualNode) %>
+  <%= render partial: 'shared/node_box', locals: { node: @resource } %>
+
+  <% if user_signed_in? && @resource.user == current_user && @resource.is_a?(Node) %>
+    <h4>Manage</h4>
+    <%= link_to 'Edit', edit_node_path(@resource) %>
+  <% end %>
+<% else %>
+  <% (@resource.nodes + @resource.virtual_nodes).each do |node| %>
+    <%= render partial: 'shared/node_box', locals: { node: node } %>
+  <% end %>
+
+  <% if @resource.tags.any? %>
+    <div class="resource-tags">
+      <h4>Tags</h4>
+      <% @resource.tags.each do |tag| %>
+        <%= link_to(tag, tag_path(name: tag)) %>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @resource.overlays.any? %>
+    <div class="resource-overlays">
+      <h4>Overlays</h4>
+      <ul>
+        <% @resource.overlays.each do |overlaid| %>
+          <li><%= link_to overlaid.title, page_url(overlaid.path) %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <% if user_signed_in? && @resource.user == current_user && @resource.is_a?(Folder) %>
+    <div class="resource-actions">
+      <h4>Manage</h4>
+      <p>
+      <%= link_to "Create Folder", new_folder_path(folder: {parent_id: @resource.id}) %>
+      |
+      <%= link_to "Create Node", new_node_path(node: {resource_id: @resource.id}) %>
+      |
+      <%= link_to "Add Mount", new_mount_path(mount: {target_id: @resource.id}) %>
+      |
+      <%= link_to "Delete Folder", @resource, method: :delete, data: { confirm: "Are you sure?" } %>
+      </p>
+    </div>
+  <% end %>
+<% end %>
+
+
+

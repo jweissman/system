@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root controller: 'folders', action: 'index'
+  root to: 'pages#show'
 
   get 'pages/show'
 

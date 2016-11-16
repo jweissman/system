@@ -10,10 +10,10 @@ class MountsController < ApplicationController
     @target = Folder.find(mount_params[:target_id])
     @mount = Mount.create(mount_params)
     if @mount.save then
-      redirect_to @target, notice: "mount created!"
+      redirect_to page_url(@target.path), notice: "mount created!"
     else
       flash[:alert] = "there was a problem"
-      redirect_to @target
+      redirect_to page_url(@target.path)
     end
   end
 

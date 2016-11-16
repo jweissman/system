@@ -19,12 +19,16 @@ as a kind of *recursion over the web*.
 
 ## The Basics
 
-You control content in your user's "home" directory... but nowhere else.
-You can structure this content how you like.
+By a default users control content in your
+user's "home" directory... but nowhere else.
+You can structure the content in the directories you control however you like!
 But there are some conventions which may help you get the most out of your System.
-You may want to create a folder called `minutes`.
+
+Fou instance, you may want to create a folder called `minutes`.
 System will then expose a 'current status' input which creates a new status update
-in `minutes`.
+in `minutes`, tagged with a timestamp.
+You can use some of the tools System provides to, for instance,
+build a unified view of all your friends minutes.
 
 ## The Tools
 
@@ -88,9 +92,7 @@ System is built with Rails 5 and Ruby 2.3.1...
 ## Getting Started
 
 `bin/setup` to get installed
-
 `rails spec` to run tests
-
 `rails server` to run local development server
 
 ## Credits

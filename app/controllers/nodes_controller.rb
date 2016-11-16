@@ -3,9 +3,11 @@ class NodesController < ApplicationController
     @nodes = Node.all
   end
 
-  def show
-    @node = Node.find(params.require(:id))
-  end
+  # def show
+  #   @show_folder_listing = false
+  #   @node = Node.find(params.require(:id))
+  #   redirect_to page_url(@node.path)
+  # end
 
   def new
     folder = Folder.find(node_params[:folder_id])
@@ -15,10 +17,10 @@ class NodesController < ApplicationController
   def create
     @node = Node.new(node_params)
     if @node.save then
-      redirect_to node_path(@node), notice: "node '#{@node.title}' created"
+      redirect_to page_url(@node.path), notice: "node '#{@node.title}' created"
     else
       flash[:alert] = "There was a problem..."
-      redirect_to nodes_url
+      redirect_to root_url
     end
   end
 
@@ -31,10 +33,10 @@ class NodesController < ApplicationController
     @node.update(node_params)
 
     if @node.save then
-      redirect_to node_path(@node), notice: "Node '#{@node.title}' updated"
+      redirect_to page_url(@node.path), notice: "Node '#{@node.title}' updated"
     else
       flash[:alert] = "Oh no...."
-      redirect_to node_path(@node)
+      redirect_to page_url(@node.path)
     end
   end
 

@@ -1,13 +1,11 @@
 class FoldersController < ApplicationController
-  include Navigation
+  # def index
+  #   redirect_to Folder.root
+  # end
 
-  def index
-    redirect_to Folder.root
-  end
-
-  def show
-    @folder = Folder.find(params.require(:id))
-  end
+  # def show
+  #   @folder = Folder.find(params.require(:id))
+  # end
 
   def new
     parent = Folder.find(folder_params[:parent_id])
@@ -17,10 +15,10 @@ class FoldersController < ApplicationController
   def create
     @folder = Folder.new(folder_params.merge(user: current_user))
     if @folder.save then
-      redirect_to (@folder), notice: "folder #{@folder.title} created"
+      redirect_to page_url(@folder.path), notice: "folder #{@folder.title} created"
     else
       flash[:alert] = @folder.errors.full_messages
-      redirect_to folders_path
+      redirect_to Folder.root
     end
   end
 
@@ -30,10 +28,10 @@ class FoldersController < ApplicationController
 
     parent = @folder.parent
     if @folder.destroy then
-      redirect_to parent, notice: "folder #{@folder.title} destroyed"
+      redirect_to page_url(parent.path), notice: "folder #{@folder.title} destroyed"
     else
       flash[:alert] = @folder.errors.full_messages
-      redirect_to @folder
+      redirect_to page_url(@folder.path)
     end
   end
 

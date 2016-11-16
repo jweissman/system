@@ -4,17 +4,8 @@ require 'digest/md5'
 module ApplicationHelper
   def maybe_virtual_link_to(resource, &blk)
     return (link_to page_url('/'), &blk) if resource.path == '/'
-
     path = resource.path.sub!(/^\//, '')
-    # path = resource.path[-1..1] # without leading slash..
     link_to page_url(path), &blk
-    # if resource.is_a?(VirtualFolder)
-    # #  link_to virtual_folder_path(resource.attributes), &blk
-    # #elsif resource.is_a?(VirtualNode)
-    # #  link_to virtual_node_path(resource.attributes), &blk
-    # else
-    #   link_to resource, &blk
-    # end
   end
 
   def gravatar_for(email, size: 50)

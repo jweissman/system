@@ -58,4 +58,18 @@ class VirtualNode
   def user
     exemplar.user
   end
+
+
+  def parent
+    folder
+  end
+
+  def children; [] end
+  def virtual_children; [] end
+  def nodes; [] end
+  def virtual_nodes; [] end
+
+  def empty?
+    content.empty?
+  end
 end

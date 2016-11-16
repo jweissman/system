@@ -15,4 +15,17 @@ class Node < ApplicationRecord
     return [] unless content =~ TAG_REGEX
     content.scan(TAG_REGEX).reduce(&:+)
   end
+
+  def parent
+    folder
+  end
+
+  def children; [] end
+  def virtual_children; [] end
+  def nodes; [] end
+  def virtual_nodes; [] end
+
+  def empty?
+    content.empty?
+  end
 end

@@ -2,62 +2,18 @@
   <%= render partial: 'shared/folder_listing', locals: {folder: folder.parent, light_up: folder.path, depth: depth-1} %>
 <% end %>
 
-<div class="folder-listing">
-  <ul>
-    <% folder.children.each do |child| %>
-      <li>
-        <%= maybe_virtual_link_to(child) do %>
-          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == child.path) %>
-          <div class="folder-child <%= lit ? 'light_up' : '' %>">
-            <img src="<%= asset_url 'folder.png' %>" />
-            <%= child.title %>/
-          </div>
+<% listing_elements = folder.children + folder.virtual_children + folder.nodes + folder.virtual_nodes %>
+<% if listing_elements.any? %>
+  <div class="folder-listing">
+    <% listing_elements.each do |elem| %>
+      <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == elem.path) %>
+      <div class="folder-child <%= lit ? 'light_up' : '' %>">
+        <%= maybe_virtual_link_to elem do %>
+          <% elem_asset_path = if elem.is_a?(VirtualFolder) || elem.is_a?(Folder) then 'folder' else 'file' end %>
+          <img src='<%= asset_url "#{elem_asset_path}.png" %>' width=16 />
+          <%= elem.title %>
         <% end %>
-      </li>
+      </div>
     <% end %>
-
-    <% folder.virtual_children.each do |virtual_child| %>
-      <li>
-        <%= maybe_virtual_link_to virtual_child do %>
-          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == virtual_child.path) %>
-          <div class="folder-child folder-virtual <%= lit ? 'light_up' : '' %>">
-            <img src="<%= asset_url 'folder.png' %>" style="opacity: 0.3" />
-            <%= virtual_child.title %>
-          </div>
-        <% end %>
-      </li>
-    <% end %>
-
-    <% folder.nodes.each do |node| %>
-     <li>
-        <%= maybe_virtual_link_to(node) do %>
-          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == node.path) %>
-          <div class="folder-node  <%= lit ? 'light_up' : ''%>">
-            <img src="<%= asset_url 'file.png' %>" />
-            <%= node.title %>
-          </div>
-        <% end %>
-      </li>
-    <% end %>
-
-    <% folder.virtual_nodes.each do |vnode| %>
-      <li>
-        <%= maybe_virtual_link_to(vnode) do %>
-          <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == vnode.path) %>
-          <div class="folder-node  <%= lit ? 'light_up' : ''%>">
-            <img src="<%= asset_url 'file.png' %>" style="opacity: 0.3" />
-            <%= vnode.title %>
-          </div>
-        <% end %>
-      </li>
-    <% end %>
-
-    <% if folder.empty? %>
-      <li>
-        <div class='folder-node no_content'>
-          No content
-        </div>
-      </li>
-    <% end %>
-  </ul>
-</div>
+  </div>
+<% end %>

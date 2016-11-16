@@ -33,14 +33,14 @@ class Folder < ApplicationRecord
     (nodes.flat_map(&:tags) + children.flat_map(&:tags)).uniq
   end
 
-  def path_components
-    Path.analyze(path)
-    # if parent
-    #   parent.path_components + [self]
-    # else
-    #   []
-    # end
-  end
+  # def path_components
+  #   Path.analyze(path)
+  #   # if parent
+  #   #   parent.path_components + [self]
+  #   # else
+  #   #   []
+  #   # end
+  # end
 
   def path
     if parent

@@ -36,7 +36,7 @@ gem 'compass-rails'
 #
 
 
-gem 'activeresource', github: 'rails/activeresource', branch: 'master'
+# gem 'activeresource', github: 'rails/activeresource', branch: 'master'
 gem 'devise'
 
 group :development, :test do

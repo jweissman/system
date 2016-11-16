@@ -2,6 +2,14 @@
 require 'digest/md5'
 
 module ApplicationHelper
+  def maybe_remote_user_path(user, &blk)
+    if user.is_a?(System::API::User)
+      page_url("/usr/#{user.name}", host: user.host, port: 80)
+    elsif user.is_a?(User)
+      page_url("/usr/#{user.name}")
+    end
+  end
+
   def maybe_virtual_link_to(resource, &blk)
     return (link_to page_url('/'), &blk) if resource.path == '/'
     path = resource.path.sub!(/^\//, '')

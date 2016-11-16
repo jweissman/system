@@ -6,10 +6,6 @@ class FoldersController < ApplicationController
     end
   end
 
-  # def show
-  #   @folder = Folder.find(params.require(:id))
-  # end
-
   def new
     parent = Folder.find(folder_params[:parent_id])
     @folder = Folder.new(parent: parent)

@@ -17,23 +17,39 @@ module System
     end
 
     class RemoteFile
-      attr_reader :title, :content
-      def initialize(hostname,title:, content:, parent_path:,user_id:)
+      attr_reader :title, :content, :created_at, :updated_at
+      def initialize(hostname,
+                     title:,
+                     content:,
+                     parent_path:,
+                     created_at:,
+                     updated_at:,
+                     user_name:,
+                     user_email:)
+
         @hostname = hostname
         @title = title
         @content = content
         @parent_path = parent_path
-        # @folder_id =
-        @remote_user_id = user_id
+
+        @user_name = user_name
+        @user_email = user_email
+        @created_at = Time.parse(created_at)
+        @updated_at = Time.parse(updated_at)
       end
 
       def user
-        System::API::User.site = @hostname
-        System::API::User.find(@remote_user_id)
+        @user ||= System::API::User.new(name: @user_name, email: @user_email, host: @hostname)
       end
     end
 
-    class User < ActiveResource::Base
+    class User
+      attr_reader :name, :email, :host
+      def initialize(name:,email:,host:)
+        @name = name
+        @email = email
+        @host = host
+      end
     end
 
     class Client
@@ -62,7 +78,11 @@ module System
               title: remote_attrs["title"],
               content: remote_attrs["content"],
               parent_path: "/",
-              user_id: remote_attrs["user"]["id"]
+              created_at: remote_attrs["created_at"],
+              updated_at: remote_attrs["updated_at"],
+              user_name: remote_attrs["user"]["name"],
+              user_email: remote_attrs["user"]["email"]
+              # user_id: remote_attrs["user"]["id"]
               # remote_path: remote_attrs["path"]
             )
           end

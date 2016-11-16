@@ -6,12 +6,6 @@ class NodesController < ApplicationController
     end
   end
 
-  # def show
-  #   @show_folder_listing = false
-  #   @node = Node.find(params.require(:id))
-  #   redirect_to page_url(@node.path)
-  # end
-
   def new
     folder = Folder.find(node_params[:folder_id])
     @node = Node.new(folder: folder)

@@ -1,6 +1,6 @@
 <div class="node-container">
   <div class="node-header">
-      <%= link_to page_url(Folder.home_for(node.user).path) do %>
+      <%= link_to maybe_remote_user_path(node.user) do %>
         <span class="node-owner">
           <%= gravatar_for(node.user.email, size: 60) %>
           <%= node.user.name %> /
@@ -19,10 +19,8 @@
     <p><%= node.content %></p>
   </div>
 
-
   <div class="node-timestamps">
     created <%= distance_of_time_in_words(Time.now - node.created_at) %> ago.
-
 
     last updated
     <%= distance_of_time_in_words(Time.now - node.updated_at) %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161111164619) do
+ActiveRecord::Schema.define(version: 20161116022924) do
 
   create_table "folders", force: :cascade do |t|
     t.string   "title"
@@ -34,6 +34,12 @@ ActiveRecord::Schema.define(version: 20161111164619) do
     t.integer  "folder_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "remote_mounts", force: :cascade do |t|
+    t.string  "host"
+    t.integer "target_id"
+    t.string  "source_path"
   end
 
   create_table "users", force: :cascade do |t|

@@ -9,7 +9,7 @@ class Path
 
   # all resources which can be 'immediately' reached from the context
   def contextual_references(ctx)
-    ctx.children + ctx.virtual_children + ctx.nodes + ctx.virtual_nodes
+    ctx.children + ctx.virtual_children + ctx.nodes + ctx.virtual_nodes + ctx.remote_children
   end
 
   def seek(subpath, context:)

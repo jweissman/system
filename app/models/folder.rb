@@ -9,6 +9,9 @@ class Folder < ApplicationRecord
   # other folders that are 'mounted' here
   has_many :overlays, through: :mount_targets, source: 'source'
 
+  # remote folders
+  has_many :bridges, class_name: "RemoteMount", foreign_key: 'target_id'
+
   before_create :assign_owner_from_parent
 
   def virtual_children
@@ -29,18 +32,18 @@ class Folder < ApplicationRecord
     end
   end
 
+  def remote_children
+    rkids = bridges.flat_map(&:children) #.uniq(&:title)
+    names = rkids.map(&:title).uniq # - nodes.map(&:title).uniq - virtual
+
+    names.map do |remote_child_name|
+      VirtualFolder.new(title: remote_child_name, parent_path: self.path)
+    end
+  end
+
   def tags
     (nodes.flat_map(&:tags) + children.flat_map(&:tags)).uniq
   end
-
-  # def path_components
-  #   Path.analyze(path)
-  #   # if parent
-  #   #   parent.path_components + [self]
-  #   # else
-  #   #   []
-  #   # end
-  # end
 
   def path
     if parent
@@ -48,11 +51,6 @@ class Folder < ApplicationRecord
     else
       '/'
     end
-    # if parent
-    #   '/' + path_components.map(&:title).join('/') + '/'
-    # else
-    #   '/'
-    # end
   end
 
   def empty?

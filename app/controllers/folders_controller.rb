@@ -1,7 +1,10 @@
 class FoldersController < ApplicationController
-  # def index
-  #   redirect_to Folder.root
-  # end
+  def index
+    @folders = Folder.root.children
+    respond_to do |format|
+      format.json { render json: @folders }
+    end
+  end
 
   # def show
   #   @folder = Folder.find(params.require(:id))

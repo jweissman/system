@@ -10,6 +10,8 @@ Rails.application.routes.draw do
   # resources :virtual_nodes
   resources :folders
   resources :mounts
+  resources :remote_mounts
+
   resource :virtual_folder
   resource :virtual_node
 

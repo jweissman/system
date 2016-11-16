@@ -1,0 +1,9 @@
+<h2>NEW REMOTE MOUNT</h2>
+
+<p>You are creating a <i>network bridge</i> onto <%= @target.path %>.</p>
+
+<%= form_for @remote_mount do |f| %>
+  <%= f.text_field :host, placeholder: "localhost:3000" %>
+  <%= hidden_field :remote_mount, :target_id %>
+  <%= submit_tag "Bridge remote system" %>
+<% end %>

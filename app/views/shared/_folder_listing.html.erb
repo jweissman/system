@@ -2,18 +2,18 @@
   <%= render partial: 'shared/folder_listing', locals: {folder: folder.parent, light_up: folder.path, depth: depth-1} %>
 <% end %>
 
-<% listing_elements = folder.children + folder.virtual_children + folder.nodes + folder.virtual_nodes %>
+<% listing_elements = folder.children + folder.virtual_children + folder.remote_children + folder.nodes + folder.virtual_nodes %>
 <% if listing_elements.any? %>
   <div class="folder-listing">
-    <% listing_elements.each do |elem| %>
-      <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == elem.path) %>
-      <div class="folder-child <%= lit ? 'light_up' : '' %>">
-        <%= maybe_virtual_link_to elem do %>
+    <% listing_elements.sort_by(&:title).each do |elem| %>
+      <%= link_to page_url(elem.path.gsub(/^\//,'')) do %>
+        <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == elem.path) %>
+        <div class="<%= lit ? 'light_up' : '' %>">
           <% elem_asset_path = if elem.is_a?(VirtualFolder) || elem.is_a?(Folder) then 'folder' else 'file' end %>
-          <img src='<%= asset_url "#{elem_asset_path}.png" %>' width=16 />
-          <%= elem.title %>
-        <% end %>
-      </div>
+          <img src='<%= asset_url "#{elem_asset_path}.png" %>' />
+          <span class='element-name'><%= elem.title %></span>
+        </div>
+      <% end %>
     <% end %>
   </div>
 <% end %>

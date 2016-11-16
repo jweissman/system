@@ -82,4 +82,12 @@ class VirtualFolder
   def empty?
     !(virtual_nodes.any? || virtual_children.any?)
   end
+
+  def remote_children
+    []
+  end
+
+  def bridges
+    []
+  end
 end

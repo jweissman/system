@@ -36,21 +36,31 @@
     </div>
   <% end %>
 
+  <% if @resource.bridges.any? %>
+    <div class="resource-bridges">
+      <h4>Bridges</h4>
+      <ul>
+        <% @resource.bridges.each do |bridge| %>
+          <li><%= link_to bridge.host, page_url(bridge.source_path, host: bridge.host) %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <% if user_signed_in? && @resource.user == current_user && @resource.is_a?(Folder) %>
     <div class="resource-actions">
       <h4>Manage</h4>
       <p>
       <%= link_to "Create Folder", new_folder_path(folder: {parent_id: @resource.id}) %>
       |
-      <%= link_to "Create Node", new_node_path(node: {resource_id: @resource.id}) %>
+      <%= link_to "Create Node", new_node_path(node: {folder_id: @resource.id}) %>
       |
       <%= link_to "Add Mount", new_mount_path(mount: {target_id: @resource.id}) %>
+      |
+      <%= link_to "Add Remote Mount", new_remote_mount_path(remote_mount: {target_id: @resource.id}) %>
       |
       <%= link_to "Delete Folder", @resource, method: :delete, data: { confirm: "Are you sure?" } %>
       </p>
     </div>
   <% end %>
 <% end %>
-
-
-

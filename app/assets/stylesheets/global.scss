@@ -29,44 +29,27 @@ html, body {
   align-items: flex-start;
 
   .folder-listing {
-    min-height: 300px;
-    border: 1px solid black;
-    ul {
-      padding: 0px;
-      min-width: 120px;
-      li {
-        a {
-          @include setLinkStyleAll {
-            color: gray;
-            text-decoration: none;
-          }
-        }
-        list-style: none;
-        img {
-          height: 20px;
-          width: 20px;
-        }
+    min-height: 200px;
+    min-width: 180px;
+    border-right: 1px dotted black;
+    padding: 0px;
+
+    a {
+      @include setLinkStyleAll {
+        color: gray;
+        text-decoration: none;
+        font-size: 20px;
       }
     }
 
-    .folder-child {
-      //background-color: #d0fad0;
-      padding: 10px;
-    }
-
-    .folder-node {
-      //background-color: #fad0d0;
-      padding: 10px;
+    img {
+      top: 5px;
+      height: 20px;
+      width: 20px;
     }
 
     .light_up {
       background-color: #d0d0fa;
     }
-
-    .no_content {
-      //background-color: darkgrey;
-      color: gray;
-    }
-    }
   }
-
+}

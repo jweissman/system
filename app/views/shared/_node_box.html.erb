@@ -1,6 +1,6 @@
 <div class="node-container">
   <div class="node-header">
-      <%= link_to Folder.home_for(node.user) do %>
+      <%= link_to page_url(Folder.home_for(node.user).path) do %>
         <span class="node-owner">
           <%= gravatar_for(node.user.email, size: 60) %>
           <%= node.user.name %> /

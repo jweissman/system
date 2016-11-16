@@ -11,12 +11,18 @@ module System
         @parent_path = parent_path
       end
 
+      def path
+        @parent_path + title
+      end
+
       def nodes
-        []
+        System.client(hostname: @hostname).files(path)
+        # []
       end
 
       def children
-        []
+        System.client(hostname: @hostname).folders(path)
+        # []
       end
     end
 
@@ -69,8 +75,8 @@ module System
         @http ||= Net::HTTP.new(@uri.host, @uri.port)
       end
 
-      def files
-        response = http.get("/nodes")
+      def files(path="/")
+        response = http.get(path + "/nodes")
         p [ :response, response ]
         case response.code.to_i
         when 200 || 201
@@ -81,7 +87,7 @@ module System
               self.host,
               title: remote_attrs["title"],
               content: remote_attrs["content"],
-              parent_path: "/",
+              parent_path: path,
               created_at: remote_attrs["created_at"],
               updated_at: remote_attrs["updated_at"],
               user_name: remote_attrs["user"]["name"],
@@ -99,10 +105,10 @@ module System
         end
       end
 
-      def folders
+      def folders(path="/")
         p [ :uri, @uri ]
         # list all remote folders...
-        response = http.get("/folders")
+        response = http.get(path + "/folders")
         p  [ :response, response ]
 
         case response.code.to_i
@@ -115,7 +121,7 @@ module System
             RemoteFolder.new(
               self.host,
               title: remote_folder_attrs["title"],
-              parent_path: "/"
+              parent_path: path #"/"
               # remote_path: remote_folder_attrs["path"]
             )
           end

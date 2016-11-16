@@ -12,13 +12,13 @@ root.save
 slash = Folder.create(title: 'root', user: root)
 
 # create basic structure
-usr = slash.children.create(title: 'usr')
-sys = slash.children.create(title: 'sys')
+usr = slash.children.create(title: 'usr', user: root)
+sys = slash.children.create(title: 'sys', user: root)
 
 # create some other root dirs
-slash.children.create(title: 'proc')
-slash.children.create(title: 'lib')
-slash.children.create(title: 'etc')
+slash.children.create(title: 'proc', user: root)
+slash.children.create(title: 'lib', user: root)
+slash.children.create(title: 'etc', user: root)
 
 usr.save
 

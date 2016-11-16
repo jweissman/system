@@ -14,8 +14,4 @@ class RemoteMount < ApplicationRecord
   def client
     @client ||= System.client(hostname: host)
   end
-
-  # def path
-  #   target_path + title + '/'
-  # end
 end

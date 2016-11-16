@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Folder, type: :model do
-  let(:admin) { User.create(name: "admin") }
+  let(:admin) { User.create(name: "admin", email: "dev-test@bignerdranch.com", password: 'testing', password_confirmation: 'testing') }
 
   let(:root) { Folder.create(user: admin, title: "root") }
 
@@ -58,17 +58,20 @@ RSpec.describe Folder, type: :model do
 
     it 'can be overlaid' do
       expect(usr.mount_targets).to include(mount)
-      expect(usr.overlays).to include(opt)
+
+      # why do we need to reload now? this was working :/
+      expect(usr.reload.overlays).to include(opt)
     end
 
     it 'virtualizes children' do
-      expect(usr.virtual_children).not_to be_empty
+      # binding.pry
+      expect(usr.reload.virtual_children).not_to be_empty
 
-      virtual_folder = usr.virtual_children.first
+      virtual_folder = usr.reload.virtual_children.first
       expect(virtual_folder.title).to eq(shared_folder.title)
       expect(virtual_folder.path).to eq("/usr/shared/")
 
-      vnode_names = virtual_folder.nodes.map(&:title)
+      vnode_names = virtual_folder.virtual_nodes.map(&:title)
       expect(vnode_names).to include(shared_file.title)
       expect(vnode_names).to include(another_shared_file.title)
     end

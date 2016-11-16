@@ -23,7 +23,8 @@ class VirtualNode
   end
 
   def constituents
-    @constituents ||= (
+    # @constituents ||= 
+      (
       base = folder.overlays
       base += folder.constituents if folder.is_a?(VirtualFolder)
       base.flat_map(&:nodes).select do |constituent|

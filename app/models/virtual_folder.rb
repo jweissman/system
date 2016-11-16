@@ -23,7 +23,8 @@ class VirtualFolder
   end
 
   def constituents
-    @constituents ||= (
+    # @constituents ||=
+    (
       base = parent.overlays
       base += parent.constituents if parent.is_a?(VirtualFolder)
       base.flat_map(&:children).select do |constituent|

@@ -17,6 +17,17 @@ inspired by filesystems like Plan9.
 One fun way to think of System (and the code definitely reflects it) is
 as a kind of *recursion over the web*.
 
+## Key Concepts
+
+- *Nodes*: documents with text.
+  (#hashtags within content are searchable.)
+- *Folders*: container of nodes and possibly other folders.
+  (basic unit of hierarchical structure)
+- *Mounts*: a virtual "union" of other folders "onto" a given folder.
+  (paths support symbolic traversal.)
+- *Bridges*: a network mount of an *entire other System* onto a given folder.
+  (paths support traversal. system api client used to facilitate interaction.)
+
 ## The Basics
 
 By a default users control content in your

@@ -4,16 +4,22 @@ class Path
   end
 
   def refer
+    # @cached_paths ||= {}
+    # @cached_paths[@target] ||= 
     seek(@target, context: Folder.root)
   end
 
   # all resources which can be 'immediately' reached from the context
   def contextual_references(ctx)
-    ctx.children + ctx.virtual_children + ctx.nodes + ctx.virtual_nodes + ctx.remote_children + ctx.remote_nodes
+    ctx.children +
+      ctx.virtual_children +
+      ctx.nodes +
+      ctx.virtual_nodes +
+      ctx.remote_children +
+      ctx.remote_nodes
   end
 
   def seek(subpath, context:)
-    puts "--- SEEK subpath #{subpath} (context: #{context.path})"
     raise "Path #{subpath} does not begin with '/'" unless subpath.start_with?("/")
     return context if subpath == '/'
 
@@ -61,10 +67,10 @@ class Path
     end
 
     def dereference(str)
+      new(str).refer
       # this will cache references that can break (b/c removal...) :/
       # @references ||= {}
-      # @references[str] ||=
-      new(str).refer
+      # @references[str] ||= new(str).refer
     end
 
     def analyze(str)

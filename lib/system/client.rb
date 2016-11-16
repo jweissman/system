@@ -17,13 +17,13 @@ module System
 
       def nodes
         p [ :remote_folder_nodes, path: path, host: @hostname ]
-        System.client(hostname: @hostname).files(path)
+        @nodes ||= System.client(hostname: @hostname).files(path)
         # []
       end
 
       def children
         p [ :remote_folder_children, path: path, host: @hostname ]
-        System.client(hostname: @hostname).folders(path)
+        @children ||= System.client(hostname: @hostname).folders(path)
         # []
       end
     end

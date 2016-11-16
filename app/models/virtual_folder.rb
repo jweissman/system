@@ -96,7 +96,7 @@ class VirtualFolder
     !(virtual_nodes.any? || virtual_children.any?)
   end
 
-  
+
   def bridges
     []
   end

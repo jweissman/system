@@ -12,7 +12,7 @@
     <%= link_to 'Edit', edit_node_path(@resource) %>
   <% end %>
 <% else %>
-  <% (@resource.nodes + @resource.virtual_nodes).each do |node| %>
+  <% (@resource.nodes + @resource.virtual_nodes + @resource.remote_nodes).each do |node| %>
     <%= render partial: 'shared/node_box', locals: { node: node } %>
   <% end %>
 

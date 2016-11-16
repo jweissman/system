@@ -28,7 +28,7 @@ module System
     end
 
     class Client
-      def initialize(host, port: 3000)
+      def initialize(host, port: 80)
         @uri = URI.parse("http://#{host}:#{port}")
         # p [ :uri, @uri ]
       end

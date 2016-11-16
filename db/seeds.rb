@@ -6,7 +6,7 @@ root = User.create(
   password_confirmation: "admin1"
 )
 
-root.save!
+root.save
 
 # create root directory
 slash = Folder.create(title: 'root', user: root)
@@ -20,7 +20,7 @@ slash.children.create(title: 'proc')
 slash.children.create(title: 'lib')
 slash.children.create(title: 'etc')
 
-usr.save!
+usr.save
 
 # create some regular users
 # wonder woman
@@ -31,7 +31,7 @@ diana = User.create(
   password_confirmation: 'freedom'
 )
 
-diana.save!
+diana.save
 diana_home = usr.children.create(title: "dprince", user: diana)
 diana_friends = diana_home.children.create(title: "friends", user: diana)
 
@@ -47,7 +47,7 @@ supes = User.create(
   password_confirmation: "justice"
 )
 
-supes.save! # ?
+supes.save
 supes_home = usr.children.create(title: "ckent", user: supes)
 
 supes_home.nodes.create(title: "about", content: "soaring overhead")

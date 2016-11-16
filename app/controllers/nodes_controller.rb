@@ -1,6 +1,9 @@
 class NodesController < ApplicationController
   def index
-    @nodes = Node.all
+    @nodes = Folder.root.nodes
+    respond_to do |format|
+      format.json { render json: @nodes }
+    end
   end
 
   # def show

@@ -2,7 +2,7 @@
   <%= render partial: 'shared/folder_listing', locals: {folder: folder.parent, light_up: folder.path, depth: depth-1} %>
 <% end %>
 
-<% listing_elements = folder.children + folder.virtual_children + folder.remote_children + folder.nodes + folder.virtual_nodes %>
+<% listing_elements = folder.children + folder.virtual_children + folder.remote_children + folder.nodes + folder.virtual_nodes + folder.remote_nodes %>
 <% if listing_elements.any? %>
   <div class="folder-listing">
     <% listing_elements.sort_by(&:title).each do |elem| %>

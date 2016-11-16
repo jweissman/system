@@ -7,6 +7,10 @@ class RemoteMount < ApplicationRecord
     client.folders
   end
 
+  def nodes
+    client.files
+  end
+
   def client
     @client ||= System.client(hostname: host)
   end

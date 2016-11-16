@@ -19,10 +19,11 @@ module System
     end
 
     class RemoteFile
-      attr_reader :title
-      def initialize(title:, remote_path:)
+      attr_reader :title, :content
+      def initialize(title:, content:, remote_path:)
         # @client = client
         @title = title
+        @content = content
         @remote_path = remote_path
       end
     end
@@ -35,6 +36,29 @@ module System
 
       def http
         @http ||= Net::HTTP.new(@uri.host, @uri.port)
+      end
+
+      def files
+        response = http.get("/nodes")
+        p [ :response, response ]
+        case response.code.to_i
+        when 200 || 201
+          p [:success]
+          files_data = JSON.parse(response.body)
+          files_data.map do |remote_attrs|
+            RemoteFile.new(
+              title: remote_attrs["title"],
+              content: remote_attrs["content"],
+              parent_path: remote_attrs["parent_path"]
+            )
+          end
+        when (400..499)
+          p [:bad_request]
+          []
+        when (500..599)
+          p [:server_problems]
+          []
+        end
       end
 
       def folders

@@ -37,7 +37,16 @@ class Folder < ApplicationRecord
     names = rkids.map(&:title).uniq # - nodes.map(&:title).uniq - virtual
 
     names.map do |remote_child_name|
-      VirtualFolder.new(title: remote_child_name, parent_path: self.path)
+      VirtualFolder.new(title: remote_child_name, parent_path: self.path, remote: true)
+    end
+  end
+
+  def remote_nodes
+    rnodes = bridges.flat_map(&:nodes)
+    names = rnodes.map(&:title).uniq
+
+    names.map do |remote_node_name|
+      VirtualNode.new(title: remote_node_name, parent_path: self.path, remote: true)
     end
   end
 

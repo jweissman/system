@@ -7,9 +7,10 @@ class VirtualFolder
 
   attr_reader :title, :parent_path
 
-  def initialize(title:, parent_path:)
+  def initialize(title:, parent_path:,remote:false)
     @title = title
     @parent_path = parent_path
+    @remote = remote
   end
 
   def parent

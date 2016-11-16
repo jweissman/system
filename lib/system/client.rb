@@ -11,6 +11,10 @@ module System
         @parent_path = parent_path
       end
 
+      def nodes
+        []
+      end
+
       def children
         []
       end

@@ -17,5 +17,7 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  get '*path/nodes', to: 'nodes#index', as: 'path_nodes'
+  get '*path/folders', to: 'folders#index', as: 'path_folders'
   get '*path', to: 'pages#show', as: 'page'
 end

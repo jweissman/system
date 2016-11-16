@@ -1,6 +1,12 @@
 class FoldersController < ApplicationController
   def index
-    @folders = Folder.root.children
+    @parent = if params[:path]
+                Path.dereference('/' + params[:path])
+              else
+                Folder.root
+              end
+
+    @folders = @parent.children
     respond_to do |format|
       format.json { render json: @folders }
     end

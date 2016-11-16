@@ -1,6 +1,12 @@
 class NodesController < ApplicationController
   def index
-    @nodes = Folder.root.nodes
+    @parent = if params[:path]
+                Path.dereference('/' + params[:path])
+              else
+                Folder.root
+              end
+
+    @nodes = @parent.nodes #Folder.root.nodes
     respond_to do |format|
       format.json { render json: @nodes, :include => [:user, :folder] } #folder: [:user]) }
     end

@@ -1,5 +1,3 @@
-# api client for system???
-#
 require "net/http"
 require "uri"
 
@@ -7,30 +5,43 @@ module System
   module API
     class RemoteFolder
       attr_reader :title
-      def initialize(title:, remote_path:)
-        # @client = client
+      def initialize(hostname, title:, parent_path:)
+        @hostname = hostname
         @title = title
-        @remote_path = remote_path
+        @parent_path = parent_path
       end
 
-      # def path
-      #   raise 'do not try to get a local path'
-      # end
+      def children
+        []
+      end
     end
 
     class RemoteFile
       attr_reader :title, :content
-      def initialize(title:, content:, remote_path:)
-        # @client = client
+      def initialize(hostname,title:, content:, parent_path:,user_id:)
+        @hostname = hostname
         @title = title
         @content = content
-        @remote_path = remote_path
+        @parent_path = parent_path
+        # @folder_id =
+        @remote_user_id = user_id
+      end
+
+      def user
+        System::API::User.site = @hostname
+        System::API::User.find(@remote_user_id)
       end
     end
 
+    class User < ActiveResource::Base
+    end
+
     class Client
-      def initialize(host, port: 80)
-        @uri = URI.parse("http://#{host}:#{port}")
+      attr_reader :host
+
+      def initialize(hostname, port: 80)
+        @host = hostname
+        @uri = URI.parse("http://#{hostname}:#{port}")
         # p [ :uri, @uri ]
       end
 
@@ -47,9 +58,12 @@ module System
           files_data = JSON.parse(response.body)
           files_data.map do |remote_attrs|
             RemoteFile.new(
+              self.host,
               title: remote_attrs["title"],
               content: remote_attrs["content"],
-              parent_path: remote_attrs["parent_path"]
+              parent_path: "/",
+              user_id: remote_attrs["user"]["id"]
+              # remote_path: remote_attrs["path"]
             )
           end
         when (400..499)
@@ -75,9 +89,10 @@ module System
             p [ :create_remote_folder, remote_folder_attrs ]
 
             RemoteFolder.new(
-              # self,
+              self.host,
               title: remote_folder_attrs["title"],
-              remote_path: remote_folder_attrs["path"]
+              parent_path: "/"
+              # remote_path: remote_folder_attrs["path"]
             )
           end
         when (400..499)

@@ -1,11 +1,12 @@
 class Node < ApplicationRecord
   belongs_to :folder
+  has_one :user, through: :folder
 
   TAG_REGEX = /#([\S]+)/
 
-  def user
-    folder.user
-  end
+  # def user
+  #   folder.user
+  # end
 
   def path
     folder.path + title

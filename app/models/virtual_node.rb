@@ -32,12 +32,26 @@ class VirtualNode
     )
   end
 
+  def remote_constituents
+    @remote_constituents ||= (
+      base = folder.bridges
+      base += folder.remote_constituents if folder.is_a?(VirtualFolder)
+      base.flat_map(&:nodes).select do |rc|
+        rc.title == title
+      end
+    )
+  end
+
   def tags
     constituents.flat_map(&:tags).uniq
   end
 
   def exemplar
-    constituents.first
+    if @remote
+      remote_constituents.first
+    else
+      constituents.first
+    end
   end
 
   def content
@@ -60,7 +74,6 @@ class VirtualNode
     exemplar.user
   end
 
-
   def parent
     folder
   end
@@ -70,6 +83,7 @@ class VirtualNode
   def nodes; [] end
   def virtual_nodes; [] end
   def remote_children; [] end
+  def remote_nodes; [] end
 
   def empty?
     content.empty?

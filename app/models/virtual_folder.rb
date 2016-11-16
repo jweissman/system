@@ -32,22 +32,6 @@ class VirtualFolder
     )
   end
 
-  def nodes
-    # names = constituents.flat_map(&:nodes).map(&:title).uniq
-    # names.map do |name|
-    #   VirtualNode.new(title: name, parent_path: path)
-    # end
-    []
-  end
-
-  def children
-    # names = constituents.flat_map(&:children).map(&:title).uniq
-    # names.map do |name|
-    #   VirtualFolder.new(title: name, parent_path: path)
-    # end
-    []
-  end
-
   def virtual_children
     kids = constituents.flat_map(&:children) + constituents.flat_map(&:virtual_children)
     vchildren_names = kids.map(&:title).uniq
@@ -63,6 +47,31 @@ class VirtualFolder
       VirtualNode.new(title: name, parent_path: path)
     end
   end
+
+  def remote_constituents
+    @remote_constituents ||= (
+      base = parent.bridges
+      base += parent.remote_constituents if parent.is_a?(VirtualFolder)
+      base.flat_map(&:children).select do |constituent|
+        constituent.title == title
+      end
+    )
+  end
+
+  def remote_children
+    rkids = remote_constituents.flat_map(&:children) #.map(&:name)
+    names = rkids.map(&:title).uniq
+
+    names.map do |remote_child_name|
+      VirtualFolder.new(title: remote_child_name, parent_path: self.path, remote: true)
+    end
+    # []
+  end
+
+  def remote_nodes
+    []
+  end
+
 
   def overlays
     constituents.flat_map(&:overlays).uniq(&:path)
@@ -84,11 +93,17 @@ class VirtualFolder
     !(virtual_nodes.any? || virtual_children.any?)
   end
 
-  def remote_children
+  
+  def bridges
     []
   end
 
-  def bridges
+  # now all 'virtualized'...
+  def nodes
+    []
+  end
+
+  def children
     []
   end
 end

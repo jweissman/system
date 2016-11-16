@@ -2,7 +2,7 @@ class NodesController < ApplicationController
   def index
     @nodes = Folder.root.nodes
     respond_to do |format|
-      format.json { render json: @nodes }
+      format.json { render json: @nodes, :include => [:user, :folder] } #folder: [:user]) }
     end
   end
 

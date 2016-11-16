@@ -34,8 +34,9 @@ gem 'compass-rails'
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 #
-#
 
+
+gem 'activeresource', github: 'rails/activeresource', branch: 'master'
 gem 'devise'
 
 group :development, :test do

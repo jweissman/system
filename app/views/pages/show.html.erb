@@ -41,7 +41,7 @@
       <h4>Bridges</h4>
       <ul>
         <% @resource.bridges.each do |bridge| %>
-          <li><%= link_to bridge.host, page_url(bridge.source_path, host: bridge.host) %></li>
+          <li><%= link_to bridge.host, page_url(bridge.source_path, host: bridge.host, port: 80) %></li>
         <% end %>
       </ul>
     </div>

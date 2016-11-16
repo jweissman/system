@@ -12,15 +12,17 @@ module System
       end
 
       def path
-        @parent_path + title
+        @parent_path + '/' + title
       end
 
       def nodes
+        p [ :remote_folder_nodes, path: path, host: @hostname ]
         System.client(hostname: @hostname).files(path)
         # []
       end
 
       def children
+        p [ :remote_folder_children, path: path, host: @hostname ]
         System.client(hostname: @hostname).folders(path)
         # []
       end

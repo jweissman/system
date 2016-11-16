@@ -13,7 +13,7 @@ class Path
   end
 
   def seek(subpath, context:)
-    # puts "--- SEEK subpath #{subpath} (context: #{context.path})"
+    puts "--- SEEK subpath #{subpath} (context: #{context.path})"
     raise "Path #{subpath} does not begin with '/'" unless subpath.start_with?("/")
     return context if subpath == '/'
 
@@ -29,7 +29,7 @@ class Path
       end
     else
       subfolder_name, *remaining_path = path_without_leading_slash.split('/')
-      matching_subfolder = (context.children + context.virtual_children).detect do |child|
+      matching_subfolder = (context.children + context.virtual_children + context.remote_children).detect do |child|
         child.title == subfolder_name
       end
 

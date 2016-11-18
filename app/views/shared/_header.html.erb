@@ -8,7 +8,7 @@
         <%= link_to "Logout", destroy_user_session_path, method: :delete %>
         )
       </small>
-      <%= link_to "Home", Folder.home_for(current_user) %>
+      <%= link_to "Home", page_url(Folder.home_for(current_user).path) %>
       <%= form_for @status_update do |f| %>
         <%= f.text_field :content, placeholder: "Whatcha doing?" %>
         <%= f.hidden_field :title, value: @status_update.title %>

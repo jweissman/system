@@ -6,9 +6,9 @@ Rails.application.routes.draw do
   get '/tags/:name', to: 'tags#show', as: 'tag'
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  resources :nodes
+  resources :nodes, only: [:index,:new,:create,:edit,:update,:destroy]
   # resources :virtual_nodes
-  resources :folders
+  resources :folders, only: [:index,:new,:create,:destroy]
   resources :mounts
   resources :remote_mounts
 

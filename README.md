@@ -90,14 +90,19 @@ and coalescing information.
   (This could fit in with `/usr/xyz/minutes` as a conventional place
   for status updates to go...  And `/usr/xyz/friends/minutes` might
   have a `.stream` dotfile)
+- Forums (threaded "replies" to nodes...)
 
 ### Infrastructure
 
 - Visibility levels
 - Other node types (images)
+- Symlinks
+- World-writable directories ("live" files for realtime collab)
+- Secure messaging (mobile apps?)
 - Processes (could do long/complicated data things with workers that
              live in `/proc` -- wordcount seems like an interesting one)
 - Sockets
+- Groups/voting
 
 ## Requirements
 

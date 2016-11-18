@@ -75,6 +75,11 @@ module System
       end
 
       def files(path="/")
+        @files ||= {}
+        @files[path] ||= list_files(path)
+      end
+
+      def list_files(path)
         response = http.get(path + "/nodes")
         p [ :response, response ]
         case response.code.to_i
@@ -103,6 +108,11 @@ module System
       end
 
       def folders(path="/")
+        @folders ||= {}
+        @folders[path] ||= list_folders(path)
+      end
+
+      def list_folders(path)
         p [ :uri, @uri ]
         # list all remote folders...
         response = http.get(path + "/folders")
@@ -129,10 +139,13 @@ module System
           []
         end
       end
+
     end
   end
 
+  # todo request-local client?
   def self.client(hostname:)
-    API::Client.new(hostname)
+    @clients ||= {}
+    @clients[hostname] ||=  API::Client.new(hostname)
   end
 end

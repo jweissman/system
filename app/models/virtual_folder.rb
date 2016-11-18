@@ -33,6 +33,7 @@ class VirtualFolder
   end
 
   def virtual_children
+    return [] if @remote
     kids = constituents.flat_map(&:children) + constituents.flat_map(&:virtual_children)
     vchildren_names = kids.map(&:title).uniq
     vchildren_names.map do |name|
@@ -41,6 +42,7 @@ class VirtualFolder
   end
 
   def virtual_nodes
+    return [] if @remote
     ns = constituents.flat_map(&:nodes) + constituents.flat_map(&:virtual_nodes)
     names = ns.map(&:title).uniq
     names.map do |name|

@@ -18,6 +18,7 @@ class Path
   end
 
   def seek(subpath, context:)
+    p [ :seek, path: subpath, ctx: context ]
     raise "Path #{subpath} does not begin with '/'" unless subpath.start_with?("/")
     return context if subpath == '/'
 

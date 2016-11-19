@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   resources :nodes, only: [:index,:new,:create,:edit,:update,:destroy]
   # resources :virtual_nodes
-  resources :folders, only: [:index,:new,:create,:destroy]
+  resources :folders, only: [:index,:new,:create,:update,:destroy]
   resources :mounts
   resources :remote_mounts
 

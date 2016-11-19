@@ -1,0 +1,8 @@
+@import "mixins.scss";
+@import "colors.scss";
+a {
+  @include setLinkStyleAll {
+    color: $primary;
+    text-decoration: none;
+  }
+}

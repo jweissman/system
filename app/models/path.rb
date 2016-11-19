@@ -1,3 +1,5 @@
+require 'caches/ttl'
+
 class Path
   def initialize(str)
     @target = str
@@ -66,13 +68,17 @@ class Path
     end
 
     def dereference(str)
-      new(str).refer
+      search_cache[str] ||= new(str).refer
     end
 
     def analyze(str)
       decompose(str).map do |component|
         dereference component
       end
+    end
+
+    def search_cache
+      @search_cache ||= Caches::TTL.new(ttl: 0.5)
     end
   end
 end

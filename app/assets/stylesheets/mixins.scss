@@ -1,0 +1,5 @@
+@mixin setLinkStyleAll {
+  &, &:hover, &:link, &:active, &:visited {
+        @content;
+    }
+}

@@ -2,23 +2,28 @@ class Node < ApplicationRecord
   belongs_to :folder
   has_one :user, through: :folder
 
-  TAG_REGEX = /#([\S]+)/
-
-  # def user
-  #   folder.user
-  # end
-
   def path
     folder.path + title
   end
 
   def tags
-    return [] unless content =~ TAG_REGEX
-    content.scan(TAG_REGEX).reduce(&:+)
+    Tag.match(content)
   end
 
   def parent
     folder
+  end
+
+  def themed?
+    parent.themed?
+  end
+
+  def active_theme
+    parent.active_theme
+  end
+
+  def theme_root
+    parent.theme_root
   end
 
   def children; [] end

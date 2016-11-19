@@ -35,6 +35,11 @@ gem 'compass-rails'
 # gem 'capistrano-rails', group: :development
 #
 
+# use nathan's caches
+gem 'caches'
+
+# redcarpet for markdown
+gem 'redcarpet'
 
 # gem 'activeresource', github: 'rails/activeresource', branch: 'master'
 gem 'devise'

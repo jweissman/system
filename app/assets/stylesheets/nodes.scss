@@ -2,12 +2,7 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-//= require global
-@mixin setLinkStyleAll {
-  &, &:hover, &:link, &:active, &:visited {
-        @content;
-    }
-}
+@import "mixins.scss";
 
 .node-container {
   margin: 10px;
@@ -35,7 +30,7 @@
   }
 
   .node-content {
-    font-size: 2.8em;
+    //font-size: 2.8em;
     color: black;
     padding: 23px;
   }

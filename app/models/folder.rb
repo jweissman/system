@@ -66,6 +66,34 @@ class Folder < ApplicationRecord
     !(children.any? || nodes.any? || virtual_children.any? || virtual_nodes.any?)
   end
 
+  def themed?
+    active_theme.present?
+    # theme.present? || (parent && parent.themed?
+  end
+
+  def active_theme
+    theme || (parent && parent.active_theme)
+  end
+
+  def theme_root
+    if parent.themed?
+      parent.theme_root
+    else
+      self
+    end
+  end
+
+  def descendants(depth=4)
+    if depth < 0
+      []
+    else
+      (nodes + virtual_nodes + remote_nodes) +
+        (children.flat_map { |child| child.descendants(depth-1)}) +
+        virtual_children.flat_map { |vchild| vchild.descendants(depth-1) } +
+        remote_children.flat_map { |rchild| rchild.descendants(depth-1) }
+    end
+  end
+
   def self.root
     Folder.find_by(parent: nil, title: "root")
   end

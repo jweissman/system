@@ -1,6 +1,8 @@
-<% path_components.each do |path_component| %>
-  <%= maybe_virtual_link_to path_component do %>
-    <%= path_component.title %>
+<div class='system-path'>
+  <% path_components.each do |path_component| %>
+    <%= maybe_virtual_link_to path_component do %>
+      <%= path_component.title %>
+    <% end %>
+    /
   <% end %>
-  /
-<% end %>
+</div>

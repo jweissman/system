@@ -89,4 +89,16 @@ class VirtualNode
   def empty?
     content.empty?
   end
+
+  def themed?
+    parent.themed?
+  end
+
+  def active_theme
+    parent.active_theme
+  end
+
+  def theme_root
+    parent.theme_root
+  end
 end

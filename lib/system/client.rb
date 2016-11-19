@@ -1,6 +1,8 @@
 require "net/http"
 require "uri"
 
+require "caches/ttl"
+
 module System
   module API
     class RemoteFolder
@@ -75,8 +77,13 @@ module System
       end
 
       def files(path="/")
-        @files ||= {}
-        @files[path] ||= list_files(path)
+        #@@files ||= {}
+        files_cache[path] ||= list_files(path)
+        # @files[path] ||= list_files(path)
+      end
+
+      def files_cache
+        @files_cache ||= Caches::TTL.new(ttl: 0.5)
       end
 
       def list_files(path)
@@ -108,8 +115,13 @@ module System
       end
 
       def folders(path="/")
-        @folders ||= {}
-        @folders[path] ||= list_folders(path)
+        folders_cache[path] ||= list_folders(path)
+        # @folders ||= {}
+        # @folders[path] ||= list_folders(path)
+      end
+
+      def folders_cache
+        @folders_cache ||= Caches::TTL.new(ttl: 0.5)
       end
 
       def list_folders(path)

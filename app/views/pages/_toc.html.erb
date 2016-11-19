@@ -1,0 +1,16 @@
+<% if depth > 0 %>
+  <ul>
+    <% (pov.children + pov.virtual_children).each do |child| %>
+      <li>
+        <% if active == child %>
+          <%= child.title %>
+        <% else %>
+          <%= link_to child.title, page_url(child.path) %>
+        <% end %>
+        <ul>
+          <%= render partial: 'toc', locals: { pov: child, depth: depth - 1 } %>
+        </ul>
+      </li>
+    <% end %>
+  </ul>
+<% end %>

@@ -26,4 +26,22 @@ module ApplicationHelper
     # compile URL which can be used in <img src="RIGHT_HERE"...
     image_tag "https://www.gravatar.com/avatar/#{hash}?s=#{size}&d=identicon" #, width: size
   end
+
+  def markdown(text)
+    text_with_tags = linkify_hashtags(text)
+    markdown_to_html.render(text_with_tags).html_safe #"This is *bongos*, indeed.")
+  end
+
+  def linkify_hashtags(text)
+    new_content = text.dup
+    Tag.match(text).each do |name|
+      new_content.gsub!(/##{name}/,"[##{name}](/tags/#{name})")
+    end
+    new_content
+  end
+
+  def markdown_to_html
+    renderer = Redcarpet::Render::HTML.new
+    @markdown_to_html ||= Redcarpet::Markdown.new(renderer) #, extensions = {})
+  end
 end

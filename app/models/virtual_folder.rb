@@ -98,6 +98,25 @@ class VirtualFolder
     !(virtual_nodes.any? || virtual_children.any?)
   end
 
+  def descendants(depth=4)
+    if depth < 0
+      []
+    else
+      (virtual_nodes) + (virtual_children.flat_map { |vchild| vchild.descendants(depth-1) })
+    end
+  end
+
+  def themed?
+    parent.themed?
+  end
+
+  def active_theme
+    parent.active_theme
+  end
+
+  def theme_root
+    parent.theme_root
+  end
 
   def bridges
     []

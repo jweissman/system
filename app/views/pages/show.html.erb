@@ -1,3 +1,9 @@
+<% content_for :header do %>
+  <section class="header">
+    <%= render 'shared/header' %>
+  </section>
+<% end %>
+
 <%= render partial: 'shared/system_path', locals: {path_components: Path.analyze(@resource.path)} %>
 
 <div class='folder-listings'>
@@ -60,6 +66,20 @@
       <%= link_to "Add Remote Mount", new_remote_mount_path(remote_mount: {target_id: @resource.id}) %>
       |
       <%= link_to "Delete Folder", @resource, method: :delete, data: { confirm: "Are you sure?" } %>
+      |
+      <% if @resource.theme %>
+        <%= link_to "Remove #{@resource.theme.capitalize} Theme", folder_path(@resource, theme: nil), method: :patch %>
+        |
+        <%= link_to "View Themed", page_url(@resource.path) %>
+      <% else %>
+        <% if @resource.themed? %>
+          <%= link_to "View Themed", page_url(@resource.path) %>
+        <% else %>
+          <%= link_to "Apply Blog Theme", folder_path(@resource, theme: "blog"), method: :patch %>
+          |
+          <%= link_to "Apply Book Theme", folder_path(@resource, theme: "book"), method: :patch %>
+        <% end %>
+      <% end %>
       </p>
     </div>
   <% end %>

@@ -1,6 +1,8 @@
 class PagesController < ApplicationController
   def show
     target = path_params[:path]
+    themed = path_params[:themed] != 'false'
+
     if target
       @resource = Path.dereference('/' + target)
       not_found(target) unless @resource
@@ -9,7 +11,14 @@ class PagesController < ApplicationController
     end
 
     respond_to do |format|
-      format.html { render :show }
+      format.html do
+        if !!themed && @resource.themed?
+          render @resource.active_theme #, layout: @resource.active_theme
+        else
+          p [ :unthemed! ]
+          render :show #, layout: 'application'
+        end
+      end
       format.json { render json: @resource }
     end
   end
@@ -20,6 +29,6 @@ class PagesController < ApplicationController
 
   private
   def path_params
-    params.permit(:path)
+    params.permit(:path, :themed)
   end
 end

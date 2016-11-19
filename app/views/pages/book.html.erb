@@ -1,0 +1,30 @@
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'book', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+<h1><%= link_to @resource.theme_root.title, page_url(@resource.theme_root.path) %></h1>
+
+<h5>Table of Contents</h5>
+  <%= render partial: 'toc', locals: { pov: @resource.theme_root, depth: 3, active: @resource } %>
+
+<% if @resource.is_a?(Node) || @resource.is_a?(VirtualNode) %>
+  <!-- single section/chapter -->
+  <h2><%= @resource.title %></h2>
+  <p><%= @resource.content %></p>
+<% else %>
+  <% @resource.nodes.each do |node| %>
+    <h2><%= link_to node.title, page_url(node.path) %></h2>
+    <p><%= node.content %></p>
+  <% end %>
+<% end %>
+
+<% unless @resource.theme_root == @resource %>
+  <%= link_to "Top", page_url(@resource.theme_root.path) %>
+  |
+  <%= link_to "Up", page_url(@resource.parent.path) %>
+<% end %>
+
+<br/>
+<br/>
+
+<%= link_to "View Unthemed", page_url(@resource.path, themed: false) %>

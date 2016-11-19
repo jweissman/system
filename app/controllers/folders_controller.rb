@@ -23,7 +23,17 @@ class FoldersController < ApplicationController
       redirect_to page_url(@folder.path), notice: "folder #{@folder.title} created"
     else
       flash[:alert] = @folder.errors.full_messages
-      redirect_to Folder.root
+      redirect_to root_url
+    end
+  end
+
+  def update
+    @folder = Folder.find(params[:id])
+    if @folder.update(theme: params[:theme])
+      redirect_to page_url(@folder.path), notice: "folder #{@folder.title} updated"
+    else
+      flash[:alert] = @folder.errors.full_messages
+      redirect_to page_url(@folder.path)
     end
   end
 
@@ -42,6 +52,6 @@ class FoldersController < ApplicationController
 
   private
     def folder_params
-      params.require(:folder).permit(:title, :parent_id)
+      params.require(:folder).permit(:title, :parent_id, :id, :theme)
     end
 end

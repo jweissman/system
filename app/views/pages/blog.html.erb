@@ -1,0 +1,30 @@
+<% content_for :head do %>
+  <%= stylesheet_link_tag 'blog', media: 'all', 'data-turbolinks-track': 'reload' %>
+<% end %>
+
+<h1><%= link_to @resource.theme_root.title, page_url(@resource.theme_root.path) %></h1>
+
+<% if @resource.is_a?(Node) || @resource.is_a?(VirtualNode) %>
+  <!-- single post -->
+  <h2 class="post-title"><%= link_to @resource.title, page_url(@resource.path) %></h2>
+  <small>
+    Posted by <%= link_to @resource.user.name, maybe_remote_user_path(@resource.user) %>
+    <%= distance_of_time_in_words(Time.now - @resource.created_at) %> ago.
+  </small>
+
+  <p><%= markdown @resource.content %></p>
+
+<% else %>
+  <% @resource.descendants.uniq(&:title).sort_by(&:created_at).each do |node| %>
+    <h2 class="post-title"><%= link_to node.title, page_url(node.path) %></h2>
+    <p><%= markdown node.content %></p>
+    <small>
+      Posted by <%= link_to node.user.name, maybe_remote_user_path(node.user) %>
+      <%= distance_of_time_in_words(Time.now - node.created_at) %> ago.
+    </small>
+  <% end %>
+<% end %>
+
+<br/>
+<br/>
+<%= link_to "View Unthemed", page_url(@resource.path, themed: false) %>

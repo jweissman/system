@@ -11,6 +11,17 @@ RSpec.describe Folder, type: :model do
   let(:opt) { Folder.create(user: admin, title: "opt", parent: root) }
   let(:lib) { Folder.create(user: admin, title: "lib", parent: root) }
 
+  describe 'themes' do
+    it 'is unthemed by default (standard sys view)' do
+      expect(root).not_to be_themed
+    end
+
+    it 'can have a theme' do
+      root.theme = 'blog'
+      expect(root).to be_themed
+    end
+  end
+
   describe 'hierarchy' do
     it 'has a parent' do
       expect(usr.parent).to eq(root)

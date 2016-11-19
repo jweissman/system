@@ -8,7 +8,7 @@
     <% listing_elements.sort_by(&:title).each do |elem| %>
       <%= link_to page_url(elem.path.gsub(/^\//,'')) do %>
         <% lit = (local_assigns[:light_up] && local_assigns[:light_up] == elem.path) %>
-        <div class="<%= lit ? 'light_up' : '' %>">
+        <div class="link-target <%= lit ? 'light_up' : '' %>">
           <% elem_asset_path = if elem.is_a?(VirtualFolder) || elem.is_a?(Folder) then 'folder' else 'file' end %>
           <img src='<%= asset_url "#{elem_asset_path}.png" %>' />
           <span class='element-name'><%= elem.title %></span>

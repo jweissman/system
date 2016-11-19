@@ -1,0 +1,10 @@
+@import "mixins.scss";
+@import "colors.scss";
+
+a {
+  //h1, h2 { color: #333; }
+  @include setLinkStyleAll {
+    text-decoration: none;
+    color: $primary;
+  }
+}

@@ -16,7 +16,9 @@ class Path
       ctx.nodes +
       ctx.virtual_nodes +
       ctx.remote_children +
-      ctx.remote_nodes
+      ctx.remote_nodes +
+      ctx.symbolic_children +
+      ctx.symbolic_nodes
   end
 
   def seek(subpath, context:)
@@ -68,7 +70,8 @@ class Path
     end
 
     def dereference(str)
-      search_cache[str] ||= new(str).refer
+      search_cache[str] ||=
+        new(str).refer
     end
 
     def analyze(str)
@@ -78,7 +81,8 @@ class Path
     end
 
     def search_cache
-      @search_cache ||= Caches::TTL.new(ttl: 0.5)
+      @search_cache ||=
+        Caches::TTL.new(ttl: 1.5)
     end
   end
 end

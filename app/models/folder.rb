@@ -4,10 +4,21 @@ class Folder < ApplicationRecord
   has_many :children, class_name: 'Folder', foreign_key: 'parent_id', dependent: :destroy
   has_many :nodes, dependent: :destroy
 
-  has_many :mount_targets, class_name: "Mount", foreign_key: 'target_id'
+  has_many :mounts, foreign_key: 'target_id'
+  has_many :symlinks, foreign_key: 'target_id'
 
   # other folders that are 'mounted' here
-  has_many :overlays, through: :mount_targets, source: 'source'
+  has_many :overlays, through: :mounts, source: 'source'
+  # has_many :symbolic_overlays #source_paths
+  # has_many :symbolic_overlay_s, through: :symlinks, source: 'source_path'
+
+  def symbolic_paths
+    symlinks.map(&:source_path)
+  end
+
+  def symbolic_overlays
+    symbolic_paths.map { |p| Path.dereference(p) }
+  end
 
   # remote folders
   has_many :bridges, class_name: "RemoteMount", foreign_key: 'target_id'
@@ -15,7 +26,7 @@ class Folder < ApplicationRecord
   before_create :assign_owner_from_parent
 
   def virtual_children
-    virtual_subfolders = overlays.flat_map(&:children)
+    virtual_subfolders = overlays.flat_map(&:children) # + symbolic_overlays.flat_map(&:children) # + symbolic_overlays.flat_map(&:remote_children)
     names = virtual_subfolders.map(&:title).uniq - children.map(&:title).uniq
 
     names.map do |virtual_folder_name|
@@ -24,7 +35,7 @@ class Folder < ApplicationRecord
   end
 
   def virtual_nodes
-    vnodes = overlays.flat_map(&:nodes)
+    vnodes = overlays.flat_map(&:nodes) # + overlays.flat_map(&:virtual_nodes) # + symbolic_overlays.flat_map(&:nodes) # + symbolic_overlays.flat_map(&:remote_nodes)
     names = vnodes.map(&:title).uniq - nodes.map(&:title).uniq
 
     names.map do |virtual_node_name|
@@ -33,7 +44,7 @@ class Folder < ApplicationRecord
   end
 
   def remote_children
-    rkids = bridges.flat_map(&:children)
+    rkids = bridges.flat_map(&:children) # + symbolic_overlays.flat_map(&:remote_children)
     names = rkids.map(&:title).uniq
 
     names.map do |remote_child_name|
@@ -48,6 +59,50 @@ class Folder < ApplicationRecord
     names.map do |remote_node_name|
       VirtualNode.new(title: remote_node_name, parent_path: self.path, remote: true)
     end
+  end
+
+  def local_symbolic_children
+    skids = symbolic_overlays.flat_map(&:children) + symbolic_overlays.flat_map(&:virtual_children) #+ symbolic_overlays.flat_map(&:remote_children)
+    names = skids.map(&:title).uniq
+
+    names.map do |sym_child_name|
+      VirtualFolder.new(title: sym_child_name, parent_path: self.path, symbolic: true)
+    end
+  end
+
+  def remote_symbolic_children
+    skids = symbolic_overlays.flat_map(&:remote_children)
+    names = skids.map(&:title).uniq
+
+    names.map do |sym_child_name|
+      VirtualFolder.new(title: sym_child_name, parent_path: self.path, symbolic: true, remote: true)
+    end
+  end
+
+  def symbolic_children
+    local_symbolic_children + remote_symbolic_children
+  end
+
+  def local_symbolic_nodes
+    snodes = symbolic_overlays.flat_map(&:nodes) + symbolic_overlays.flat_map(&:virtual_nodes) # + symbolic_overlays.flat_map(&:remote_nodes)
+    names = snodes.map(&:title).uniq
+
+    names.map do |sym_node_name|
+      VirtualNode.new(title: sym_node_name, parent_path: self.path, symbolic: true)
+    end
+  end
+
+  def remote_symbolic_nodes
+    snodes = symbolic_overlays.flat_map(&:remote_nodes)
+    names = snodes.map(&:title).uniq
+
+    names.map do |sym_node_name|
+      VirtualNode.new(title: sym_node_name, parent_path: self.path, symbolic: true, remote: true)
+    end
+  end
+
+  def symbolic_nodes
+    local_symbolic_nodes + remote_symbolic_nodes
   end
 
   def tags
@@ -76,7 +131,7 @@ class Folder < ApplicationRecord
   end
 
   def theme_root
-    if parent.themed?
+    if parent && parent.themed?
       parent.theme_root
     else
       self
@@ -87,11 +142,16 @@ class Folder < ApplicationRecord
     if depth < 0
       []
     else
-      (nodes + virtual_nodes + remote_nodes) +
+      (nodes + virtual_nodes + remote_nodes + symbolic_nodes) +
         (children.flat_map { |child| child.descendants(depth-1)}) +
         virtual_children.flat_map { |vchild| vchild.descendants(depth-1) } +
-        remote_children.flat_map { |rchild| rchild.descendants(depth-1) }
+        remote_children.flat_map { |rchild| rchild.descendants(depth-1) } +
+        symbolic_children.flat_map { |schild| schild.descendants(depth-1) }
     end
+  end
+
+  def remote?
+    false
   end
 
   def self.root

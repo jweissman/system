@@ -1,0 +1,9 @@
+<h1>CREATE NEW SYMLINK</h1>
+
+<h4>You are symlinking <b>onto</b> <%= @target.path %>.</h4>
+
+<%= form_for @symlink do %>
+  <%= text_field :symlink, :source_path, placeholder: "/usr/example" %>
+  <%= hidden_field :symlink, :target_id %>
+  <%= submit_tag 'create symlink' %>
+<% end %>

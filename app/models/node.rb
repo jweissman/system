@@ -27,11 +27,13 @@ class Node < ApplicationRecord
   end
 
   def children; [] end
-  def virtual_children; [] end
   def nodes; [] end
+  def virtual_children; [] end
   def virtual_nodes; [] end
   def remote_children; [] end
   def remote_nodes; [] end
+  def symbolic_children; [] end
+  def symbolic_nodes; [] end
 
   def empty?
     content.empty?

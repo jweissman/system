@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161118150521) do
+ActiveRecord::Schema.define(version: 20161119193721) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,6 +44,11 @@ ActiveRecord::Schema.define(version: 20161118150521) do
     t.string  "host"
     t.integer "target_id"
     t.string  "source_path"
+  end
+
+  create_table "symlinks", force: :cascade do |t|
+    t.string  "source_path"
+    t.integer "target_id"
   end
 
   create_table "users", force: :cascade do |t|

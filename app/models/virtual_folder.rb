@@ -7,10 +7,15 @@ class VirtualFolder
 
   attr_reader :title, :parent_path
 
-  def initialize(title:, parent_path:,remote:false)
+  def initialize(title:, parent_path:, remote:false, symbolic: false)
     @title = title
     @parent_path = parent_path
     @remote = remote
+    @symbolic = symbolic
+  end
+
+  def remote?
+    !!@remote
   end
 
   def parent
@@ -24,7 +29,7 @@ class VirtualFolder
   def constituents
     @constituents ||=
     (
-      base = parent.overlays
+      base = parent.overlays # + parent.symbolic_overlays
       base += parent.constituents if parent.is_a?(VirtualFolder)
       base.flat_map(&:children).select do |constituent|
         constituent.title == title
@@ -51,8 +56,9 @@ class VirtualFolder
   end
 
   def remote_constituents
-    @remote_constituents ||= (
-      base = parent.bridges
+    # @remote_constituents ||=
+    (
+      base = parent.bridges # + parent.symbolic_overlays.select(&:remote?)
       base += parent.remote_constituents if parent.is_a?(VirtualFolder)
       base.flat_map(&:children).select do |constituent|
         constituent.title == title
@@ -78,8 +84,36 @@ class VirtualFolder
     end
   end
 
+  def symbolic_constituents
+    (
+      base = parent.symbolic_overlays
+      base += parent.symbolic_constituents if parent.is_a?(VirtualFolder)
+      (base.flat_map(&:children) + base.flat_map(&:virtual_children) + base.flat_map(&:remote_children)).select do |constituent|
+        constituent.title == title
+      end
+    )
+  end
+
+  def symbolic_children
+    symbolic_constituents.flat_map(&:children) +
+      symbolic_constituents.flat_map(&:virtual_children) +
+      symbolic_constituents.flat_map(&:remote_children) +
+      symbolic_constituents.flat_map(&:symbolic_children)
+  end
+
+  def symbolic_nodes
+    symbolic_constituents.flat_map(&:nodes) +
+      symbolic_constituents.flat_map(&:virtual_nodes) +
+      symbolic_constituents.flat_map(&:remote_nodes) +
+      symbolic_constituents.flat_map(&:symbolic_nodes)
+  end
+
   def overlays
     constituents.flat_map(&:overlays).uniq(&:path)
+  end
+
+  def symbolic_overlays
+    constituents.flat_map(&:symbolic_overlays).uniq(&:path)
   end
 
   def tags
@@ -95,7 +129,7 @@ class VirtualFolder
   end
 
   def empty?
-    !(virtual_nodes.any? || virtual_children.any?)
+    !(virtual_nodes.any? || virtual_children.any? || symbolic_nodes.any? || symbolic_children.any?)
   end
 
   def descendants(depth=4)

@@ -4,10 +4,15 @@ class VirtualNode
 
   attr_reader :title, :parent_path
 
-  def initialize(title:, parent_path:, remote: false)
+  def initialize(title:, parent_path:, remote: false, symbolic: false)
     @title = title
     @parent_path = parent_path
     @remote = remote
+    @symbolic = symbolic
+  end
+
+  def remote?
+    !!@remote
   end
 
   def path
@@ -23,9 +28,9 @@ class VirtualNode
   end
 
   def constituents
-    # @constituents ||= 
+    # @constituents ||=
       (
-      base = folder.overlays
+      base = folder.overlays # + folder.symbolic_overlays.reject(&:remote?)
       base += folder.constituents if folder.is_a?(VirtualFolder)
       base.flat_map(&:nodes).select do |constituent|
         constituent.title == title
@@ -34,11 +39,22 @@ class VirtualNode
   end
 
   def remote_constituents
-    @remote_constituents ||= (
-      base = folder.bridges
+    # @remote_constituents ||= (
+    (
+      base = folder.bridges # + folder.symbolic_overlays.select(&:remote?) #flat_map(&:bridges)
       base += folder.remote_constituents if folder.is_a?(VirtualFolder)
       base.flat_map(&:nodes).select do |rc|
         rc.title == title
+      end
+    )
+  end
+
+  def symbolic_constituents
+    (
+      base = folder.symbolic_overlays
+      base += folder.symbolic_constituents if folder.is_a?(VirtualFolder)
+      (base.flat_map(&:nodes) + base.flat_map(&:virtual_nodes) + base.flat_map(&:remote_nodes)).select do |constituent|
+        constituent.title == title
       end
     )
   end
@@ -48,11 +64,7 @@ class VirtualNode
   end
 
   def exemplar
-    if @remote
-      remote_constituents.first
-    else
-      constituents.first
-    end
+    (constituents + remote_constituents + symbolic_constituents).first
   end
 
   def content
@@ -85,6 +97,8 @@ class VirtualNode
   def virtual_nodes; [] end
   def remote_children; [] end
   def remote_nodes; [] end
+  def symbolic_children; [] end
+  def symbolic_nodes; [] end
 
   def empty?
     content.empty?

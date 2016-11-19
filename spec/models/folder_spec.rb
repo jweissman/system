@@ -11,6 +11,8 @@ RSpec.describe Folder, type: :model do
   let(:opt) { Folder.create(user: admin, title: "opt", parent: root) }
   let(:lib) { Folder.create(user: admin, title: "lib", parent: root) }
 
+  let(:etc) { Folder.create(user: admin, title: "etc", parent: root) }
+
   describe 'themes' do
     it 'is unthemed by default (standard sys view)' do
       expect(root).not_to be_themed
@@ -84,6 +86,17 @@ RSpec.describe Folder, type: :model do
       vnode_names = virtual_folder.virtual_nodes.map(&:title)
       expect(vnode_names).to include(shared_file.title)
       expect(vnode_names).to include(another_shared_file.title)
+    end
+
+    let!(:symlink) do
+      Symlink.create(source_path: '/usr/shared', target: etc)
+    end
+
+    it 'can be symbolically overlaid' do
+      expect(etc.symbolic_overlays).to eq(['/usr/shared'])
+
+      expect(etc.symbolic_nodes.map(&:title)).to include(shared_file.title)
+      expect(etc.symbolic_nodes.map(&:title)).to include(another_shared_file.title)
     end
   end
 end

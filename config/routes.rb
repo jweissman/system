@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :folders, only: [:index,:new,:create,:update,:destroy]
   resources :mounts
   resources :remote_mounts
+  resources :symlinks
 
   resource :virtual_folder
   resource :virtual_node

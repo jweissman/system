@@ -7,10 +7,7 @@ class Folder < ApplicationRecord
   has_many :mounts, foreign_key: 'target_id'
   has_many :symlinks, foreign_key: 'target_id'
 
-  # other folders that are 'mounted' here
   has_many :overlays, through: :mounts, source: 'source'
-  # has_many :symbolic_overlays #source_paths
-  # has_many :symbolic_overlay_s, through: :symlinks, source: 'source_path'
 
   def symbolic_paths
     symlinks.map(&:source_path)
@@ -26,7 +23,7 @@ class Folder < ApplicationRecord
   before_create :assign_owner_from_parent
 
   def virtual_children
-    virtual_subfolders = overlays.flat_map(&:children) # + symbolic_overlays.flat_map(&:children) # + symbolic_overlays.flat_map(&:remote_children)
+    virtual_subfolders = overlays.flat_map(&:children)
     names = virtual_subfolders.map(&:title).uniq - children.map(&:title).uniq
 
     names.map do |virtual_folder_name|
@@ -35,7 +32,7 @@ class Folder < ApplicationRecord
   end
 
   def virtual_nodes
-    vnodes = overlays.flat_map(&:nodes) # + overlays.flat_map(&:virtual_nodes) # + symbolic_overlays.flat_map(&:nodes) # + symbolic_overlays.flat_map(&:remote_nodes)
+    vnodes = overlays.flat_map(&:nodes)
     names = vnodes.map(&:title).uniq - nodes.map(&:title).uniq
 
     names.map do |virtual_node_name|
@@ -44,7 +41,7 @@ class Folder < ApplicationRecord
   end
 
   def remote_children
-    rkids = bridges.flat_map(&:children) # + symbolic_overlays.flat_map(&:remote_children)
+    rkids = bridges.flat_map(&:children)
     names = rkids.map(&:title).uniq
 
     names.map do |remote_child_name|
@@ -62,7 +59,7 @@ class Folder < ApplicationRecord
   end
 
   def local_symbolic_children
-    skids = symbolic_overlays.flat_map(&:children) + symbolic_overlays.flat_map(&:virtual_children) #+ symbolic_overlays.flat_map(&:remote_children)
+    skids = symbolic_overlays.flat_map(&:children) + symbolic_overlays.flat_map(&:virtual_children)
     names = skids.map(&:title).uniq
 
     names.map do |sym_child_name|
